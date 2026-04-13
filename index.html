@@ -118,6 +118,8 @@ td.bank-cell{font-size:11px;font-weight:600;vertical-align:middle;text-align:cen
 .add-btn:hover{background:var(--bg2);color:var(--ink)}
 .del-btn{border:none;background:transparent;padding:1px 5px;font-size:12px;color:var(--ink3);cursor:pointer}
 .del-btn:hover{color:var(--red)}
+.add-det-btn{border:1px solid var(--h1bg);background:transparent;padding:1px 5px;font-size:12px;color:var(--h1bg);cursor:pointer;border-radius:3px;font-weight:700;margin-right:2px}
+.add-det-btn:hover{background:var(--h1bg);color:#fff}
 
 /* 월별보고서 패널 */
 .monthly-panel{background:#fff;border:1px solid var(--border);border-radius:var(--r2);margin-bottom:10px;overflow:hidden;display:none}
@@ -159,7 +161,7 @@ td.bank-cell{font-size:11px;font-weight:600;vertical-align:middle;text-align:cen
   td{font-size:7.5px;padding:2px 4px;background:#fff!important}
   tr.maechul-row td{background:#fff7f7!important}
   tr.ipgeum-row td{background:#f5f9ff!important}
-  tr.tot-row td{background:#f5e0c0!important;font-size:9px}
+  tr.tot-row td{background:#f5e0c0!important;font-size:8.5px!important;font-weight:700}
   .tbl-wrap{overflow:visible}
   table{table-layout:auto;width:100%}
   .add-btn,.del-btn,.sec-add-btn,.sec-btns{display:none!important}
@@ -265,7 +267,7 @@ td.bank-cell{font-size:11px;font-weight:600;vertical-align:middle;text-align:cen
     <div class="sec-title"><span class="sec-num">02</span>현금 · 예금<span class="sec-sub">계좌별 입출금 현황</span></div>
     <div class="sec-btns no-print">
       <button class="sec-add-btn" onclick="addInitAcct()">+ 기초 계좌</button>
-      <button class="sec-add-btn" onclick="addCashDetail()">+ 상세내역 추가</button>
+      
     </div>
   </div>
   <div class="tbl-wrap">
@@ -288,7 +290,7 @@ td.bank-cell{font-size:11px;font-weight:600;vertical-align:middle;text-align:cen
       <tbody id="cashBody"></tbody>
     </table>
   </div>
-  <button class="add-btn no-print" onclick="addCashDetail()">+ 상세내역 추가</button>
+  
 </div>
 
 <!-- 03 대출내역 -->
@@ -436,7 +438,7 @@ function calcAcctBal(day,acct){
   const a=(day.accounts||[]).find(x=>x.acct===acct);
   if(!a)return 0;
   const prev=prs(a.prev);
-  const details=(day.cashDetails||[]).filter(d=>d.acct===acct);
+  const details=(day.cashDetails||[]).filter(d=>d.aid===a.id||(d.aid===undefined&&d.acct===a.acct));
   const inc=details.reduce((s,d)=>s+prs(d.inc),0);
   const out=details.reduce((s,d)=>s+prs(d.out),0);
   return prev+inc-out;
@@ -548,7 +550,7 @@ function renderCash(){
   let totalPrev=0,totalInc=0,totalOut=0;
 
   accounts.forEach(a=>{
-    const acctDetails=details.filter(d=>d.acct===a.acct);
+    const acctDetails=details.filter(d=>d.aid===a.id||(d.aid===undefined&&d.acct===a.acct));
     const inc=acctDetails.reduce((s,d)=>s+prs(d.inc),0);
     const out=acctDetails.reduce((s,d)=>s+prs(d.out),0);
     const prev=prs(a.prev);
@@ -569,15 +571,16 @@ function renderCash(){
           :`<td class="r editable" onclick="focIn(this)" data-pv="${f(prev)||''}"><input class="num-in is-bal" type="text" value="${f(prev)||''}" placeholder="0" data-aid="${a.id}" data-k="prev" onblur="aPrevBlur(this)"></td>`)+
         `<td class="r" style="color:var(--green)">—</td>`+
         `<td class="r" style="color:var(--red)">—</td>`+
-        `<td class="r" style="font-size:12.5px;font-weight:700">${f(bal)}</td>`+
+        `<td class="r" style="font-weight:700">${f(bal)}</td>`+
         `<td class="editable is-area" onclick="focIn(this)" data-pv=""><textarea class="area-in" rows="1" data-did="" data-k="detail" onblur="dBlur(this)" placeholder="상세내역"></textarea></td>`+
         `<td class="editable is-txt" onclick="focIn(this)" data-pv=""><input class="txt-in" type="text" value="" placeholder="비고2" data-did="" data-k="note2" onblur="dTxtBlur(this)"></td>`+
-        `<td class="c no-print"><button class="del-btn" title="계좌삭제" onclick="delAcct('${a.id}')">×</button></td>`;
+        `<td class="c no-print" style="white-space:nowrap"><button class="add-det-btn no-print" onclick="addCashDetail('${a.id}')" title="상세내역 추가">+</button><button class="del-btn" title="계좌삭제" onclick="delAcct('${a.id}')">×</button></td>`;
       tb.appendChild(tr);
     } else {
       acctDetails.forEach((det,di)=>{
         const tr=document.createElement('tr');
         const isFirst=di===0;
+        const isLast=di===acctDetails.length-1;
         let cells='';
         if(isFirst){
           cells+=`<td class="editable is-txt" rowspan="${rowCount}" onclick="focIn(this)" data-pv="${esc(a.bank)}" style="text-align:center;font-weight:600;vertical-align:middle;border-right:1px solid var(--border)"><input class="txt-in" type="text" value="${esc(a.bank)}" placeholder="은행명" data-aid="${a.id}" data-k="bank" onblur="aBlur(this)" style="text-align:center;font-weight:600"></td>`;
@@ -591,12 +594,12 @@ function renderCash(){
           `<td class="r editable is-plus" onclick="focIn(this)" data-pv="${prs(det.inc)?f(prs(det.inc)):''}"><input class="num-in is-plus" type="text" value="${prs(det.inc)?f(prs(det.inc)):''}" placeholder="—" data-did="${det.id}" data-k="inc" onblur="dNumBlur(this)"></td>`+
           `<td class="r editable is-minus" onclick="focIn(this)" data-pv="${prs(det.out)?f(prs(det.out)):''}"><input class="num-in is-minus" type="text" value="${prs(det.out)?f(prs(det.out)):''}" placeholder="—" data-did="${det.id}" data-k="out" onblur="dNumBlur(this)"></td>`;
         if(isFirst){
-          cells+=`<td class="r" rowspan="${rowCount}" style="font-size:12.5px;font-weight:700">${f(bal)}</td>`;
+          cells+=`<td class="r" rowspan="${rowCount}" style="font-weight:700">${f(bal)}</td>`;
         }
         cells+=
           `<td class="editable is-area" onclick="focIn(this)" data-pv="${esc(det.detail||'')}"><textarea class="area-in" rows="1" data-did="${det.id}" data-k="detail" onblur="dBlur(this)">${esc(det.detail||'')}</textarea></td>`+
           `<td class="editable is-txt" onclick="focIn(this)" data-pv="${esc(det.note2||'')}"><input class="txt-in" type="text" value="${esc(det.note2||'')}" placeholder="비고2" data-did="${det.id}" data-k="note2" onblur="dTxtBlur(this)"></td>`+
-          `<td class="c no-print"><button class="del-btn" onclick="delDetail('${det.id}')">×</button></td>`;
+          `<td class="c no-print" style="white-space:nowrap">${isLast?'<button class="add-det-btn" onclick="addCashDetail(\'${a.id}\')" title="이 계좌에 상세추가">+</button>':''}<button class="del-btn" onclick="delDetail('${det.id}')">×</button></td>`;
         tr.innerHTML=cells;
         tb.appendChild(tr);
       });
@@ -659,12 +662,14 @@ function addInitAcct(){
   cur().accounts.push({id:uid(),bank:'',acct:'',note:'',prev:0,prevLocked:false});
   dbSave();renderCash();
 }
-function addCashDetail(){
+function addCashDetail(aid){
   const accounts=cur().accounts||[];
   if(!accounts.length){alert('먼저 계좌를 추가해주세요.');return;}
-  const acct=accounts[accounts.length-1].acct||accounts[0].acct;
+  // aid가 있으면 해당 계좌, 없으면 마지막 계좌
+  const a=aid?accounts.find(x=>x.id===aid):accounts[accounts.length-1];
+  if(!a){alert('계좌를 찾을 수 없습니다.');return;}
   if(!cur().cashDetails)cur().cashDetails=[];
-  cur().cashDetails.push({id:uid(),acct:acct,inc:0,out:0,detail:'',note2:''});
+  cur().cashDetails.push({id:uid(),acct:a.acct||a.id,aid:a.id,inc:0,out:0,detail:'',note2:''});
   dbSave();renderCash();
 }
 function delAcct(aid){
@@ -692,7 +697,7 @@ function renderLoan(){
       mkEdNum(r.principal,'loan',i,'principal')+
       mkEd('txt',r.rate,'금리','loan',i,'rate','text-align:center')+
       mkEdNum(r.interest,'loan',i,'interest','is-minus')+
-      `<td class="r" style="font-size:12.5px;font-weight:700;color:var(--ink)">${f(prs(r.balance))}</td>`+
+      `<td class="r" style="font-weight:700;color:var(--ink)">${f(prs(r.balance))}</td>`+
       `<td class="editable is-area" onclick="focIn(this)" data-pv="${esc(r.collateral||'')}"><textarea class="area-in" rows="2" data-li="${i}" data-k="collateral" onblur="lAreaBlur(this)">${esc(r.collateral||'')}</textarea></td>`+
       mkEd('txt',r.note,'비고','loan',i,'note')+
       `<td class="c no-print"><button class="del-btn" onclick="delLoanRow(${i})">×</button></td>`;
