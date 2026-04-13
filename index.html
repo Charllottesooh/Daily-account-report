@@ -561,8 +561,8 @@ function renderCash(){
       /* 상세내역 없는 경우 */
       const tr=document.createElement('tr');
       tr.innerHTML=
-        `<td class="bank-cell" rowspan="1"><div>${esc(a.bank)}</div></td>`+
-        `<td class="acct-cell" rowspan="1" style="font-size:10px">${esc(a.acct)}</td>`+
+        `<td class="editable is-txt" onclick="focIn(this)" data-pv="${esc(a.bank)}" style="text-align:center;font-weight:600"><input class="txt-in" type="text" value="${esc(a.bank)}" placeholder="은행명" data-aid="${a.id}" data-k="bank" onblur="aBlur(this)" style="text-align:center;font-weight:600"></td>`+
+        `<td class="editable is-txt" onclick="focIn(this)" data-pv="${esc(a.acct)}" style="text-align:center"><input class="txt-in" type="text" value="${esc(a.acct)}" placeholder="계좌번호" data-aid="${a.id}" data-k="acct" onblur="aBlur(this)" style="font-size:10.5px;text-align:center"></td>`+
         `<td class="editable is-txt" onclick="focIn(this)" data-pv="${esc(a.note||'')}"><input class="txt-in" type="text" value="${esc(a.note||'')}" placeholder="비고" data-aid="${a.id}" data-k="note" onblur="aBlur(this)"></td>`+
         (isLocked
           ?`<td class="r"><span class="prev-locked">${f(prev)||'0'}</span></td>`
@@ -580,8 +580,8 @@ function renderCash(){
         const isFirst=di===0;
         let cells='';
         if(isFirst){
-          cells+=`<td class="bank-cell" rowspan="${rowCount}">${esc(a.bank)}</td>`;
-          cells+=`<td class="acct-cell" rowspan="${rowCount}" style="font-size:10px">${esc(a.acct)}</td>`;
+          cells+=`<td class="editable is-txt" rowspan="${rowCount}" onclick="focIn(this)" data-pv="${esc(a.bank)}" style="text-align:center;font-weight:600;vertical-align:middle;border-right:1px solid var(--border)"><input class="txt-in" type="text" value="${esc(a.bank)}" placeholder="은행명" data-aid="${a.id}" data-k="bank" onblur="aBlur(this)" style="text-align:center;font-weight:600"></td>`;
+          cells+=`<td class="editable is-txt" rowspan="${rowCount}" onclick="focIn(this)" data-pv="${esc(a.acct)}" style="text-align:center;vertical-align:middle;border-right:1px solid var(--border)"><input class="txt-in" type="text" value="${esc(a.acct)}" placeholder="계좌번호" data-aid="${a.id}" data-k="acct" onblur="aBlur(this)" style="font-size:10.5px;text-align:center"></td>`;
           cells+=`<td class="editable is-txt" rowspan="${rowCount}" onclick="focIn(this)" data-pv="${esc(a.note||'')}"><input class="txt-in" type="text" value="${esc(a.note||'')}" placeholder="비고" data-aid="${a.id}" data-k="note" onblur="aBlur(this)"></td>`;
           cells+=(isLocked
             ?`<td class="r" rowspan="${rowCount}"><span class="prev-locked">${f(prev)||'0'}</span></td>`
