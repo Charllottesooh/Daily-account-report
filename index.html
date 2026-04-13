@@ -77,7 +77,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--h1bg)}
 table{width:100%;border-collapse:collapse;font-family:var(--sans)}
 th{font-size:10px;font-weight:600;color:var(--ink2);padding:5px 7px;text-align:center;border-bottom:1px solid var(--border);white-space:nowrap;background:#fdf8f3}
 th.r{text-align:right}
-td{font-size:11px;padding:5px 7px;border-bottom:1px solid var(--border);color:var(--ink);vertical-align:middle;background:#fff}
+td{font-size:11px;padding:5px 7px;border-bottom:0.5px solid var(--border);color:var(--ink);vertical-align:middle;background:#fff}
 td.r{text-align:right}
 td.c{text-align:center}
 tr:last-child td{border-bottom:none}
@@ -131,8 +131,8 @@ td.ed:focus-within{background:#fff8f0;outline:1px solid var(--h1bg);outline-offs
   .section{margin-bottom:5px;page-break-inside:avoid}
   .sec-head{padding:4px 8px}
   .sec-title{font-size:9.5px}
-  th{font-size:7.5px;padding:2px 4px;background:#f5ede2!important;color:#333!important}
-  td{font-size:7.5px;padding:2px 4px}
+  th{font-size:7.5px;padding:2px 4px;background:#f5ede2!important;color:#333!important;border-bottom:0.5px solid var(--border2)}
+  td{font-size:7.5px;padding:2px 4px;border-bottom:0.3px solid var(--border)}
   tr.tot-row td{background:#f5e0c0!important;font-size:8px}
   tr.acct-hdr td{background:#fdf0e0!important}
   .tbl-wrap{overflow:visible}
@@ -554,54 +554,66 @@ function renderCash(){
   });
 
   keys.forEach(function(key){
-    const grp=gmap[key];
-    const hdr=grp.find(function(r){return r.isHdr;})||grp[0];
-    const prev=p(hdr.prev);
-    const allInc=grp.reduce(function(s,r){return s+p(r.inc);},0);
-    const allOut=grp.reduce(function(s,r){return s+p(r.out);},0);
-    const bal=prev+allInc-allOut;
+    var grp=gmap[key];
+    var hdr=grp.find(function(r){return r.isHdr;})||grp[0];
+    var prev=p(hdr.prev);
+    var allInc=grp.reduce(function(s,r){return s+p(r.inc);},0);
+    var allOut=grp.reduce(function(s,r){return s+p(r.out);},0);
+    var bal=prev+allInc-allOut;
     tP+=prev;tI+=allInc;tO+=allOut;
-    const rc=grp.length;
+    var rc=grp.length;
 
     grp.forEach(function(r,ri){
-      const isFirst=ri===0;
-      const isLast=ri===rc-1;
-      const tr=document.createElement('tr');
+      var isFirst=ri===0;
+      var isLast=ri===rc-1;
+      var tr=document.createElement('tr');
       tr.className=isFirst?'acct-hdr':'det-row';
-      let c='';
+      var c='';
 
       if(isFirst){
-        c+='<td rowspan="'+rc+'" style="text-align:center;font-weight:700;vertical-align:middle;border-right:1px solid var(--border)">'+esc(hdr.bank)+'</td>';
+        /* 은행명 rowspan */
+        c+='<td rowspan="'+rc+'" style="text-align:center;font-weight:400;vertical-align:middle;border-right:1px solid var(--border)">'+esc(hdr.bank)+'</td>';
+        /* 계좌번호 rowspan */
         c+='<td rowspan="'+rc+'" style="text-align:center;vertical-align:middle;border-right:1px solid var(--border);font-size:10px;color:var(--ink3)">'+esc(hdr.acct)+'</td>';
+        /* 비고 rowspan */
         c+='<td rowspan="'+rc+'" style="text-align:center;vertical-align:middle;border-right:1px solid var(--border);font-size:10.5px;color:var(--ink2)">'+esc(hdr.note||'')+'</td>';
+        /* 전잔액 rowspan - 잠금여부 */
         if(hdr.prevLocked){
-          c+='<td class="r" rowspan="'+rc+'" style="vertical-align:middle;font-size:11px;color:var(--ink3);font-style:italic">'+(f(prev)||'0')+'</td>';
+          c+='<td class="r" rowspan="'+rc+'" style="vertical-align:middle;color:var(--ink3);font-style:italic">'+(f(prev)||'0')+'</td>';
         } else {
-          c+='<td class="r ed" rowspan="'+rc+'" onclick="fi(this)" data-v="'+(f(prev)||'')+'" style="vertical-align:middle"><input class="n-in" type="text" value="'+(f(prev)||'')+'" placeholder="0" onblur="cPrev(\''+hdr.id+'\',this.value)"></td>';
+          c+='<td class="r ed" rowspan="'+rc+'" onclick="fi(this)" data-v="'+(f(prev)||'')+'" style="vertical-align:middle"><input class="n-in" type="text" value="'+(f(prev)||'')+'" placeholder="0" onchange="cPrev(\''+hdr.id+'\',this.value)"></td>';
         }
-        c+='<td class="r" rowspan="'+rc+'" style="font-weight:700;vertical-align:middle">'+f(bal)+'</td>';
       }
 
-      c+='<td class="r ed pos" onclick="fi(this)" data-v="'+(p(r.inc)?f(p(r.inc)):'')+'"><input class="n-in pos" type="text" value="'+(p(r.inc)?f(p(r.inc)):'')+'" placeholder="—" onblur="cNum(\''+r.id+'\',\'inc\',this.value)"></td>';
-      c+='<td class="r ed neg" onclick="fi(this)" data-v="'+(p(r.out)?f(p(r.out)):'')+'"><input class="n-in neg" type="text" value="'+(p(r.out)?f(p(r.out)):'')+'" placeholder="—" onblur="cNum(\''+r.id+'\',\'out\',this.value)"></td>';
-      c+='<td class="ed" onclick="fi(this)" data-v="'+esc(r.detail||'')+'"><input class="t-in" type="text" value="'+esc(r.detail||'')+'" placeholder="상세내역" onblur="cTxt(\''+r.id+'\',\'detail\',this.value)"></td>';
-      c+='<td class="ed" onclick="fi(this)" data-v="'+esc(r.note2||'')+'"><input class="t-in" type="text" value="'+esc(r.note2||'')+'" placeholder="비고2" onblur="cTxt(\''+r.id+'\',\'note2\',this.value)"></td>';
+      /* 입금 - 매 행마다 */
+      c+='<td class="r ed pos" onclick="fi(this)" data-v="'+(p(r.inc)?f(p(r.inc)):'')+'"><input class="n-in pos" type="text" value="'+(p(r.inc)?f(p(r.inc)):'')+'" placeholder="-" onchange="cNum(\''+r.id+'\',\'inc\',this.value)"></td>';
+      /* 출금 - 매 행마다 */
+      c+='<td class="r ed neg" onclick="fi(this)" data-v="'+(p(r.out)?f(p(r.out)):'')+'"><input class="n-in neg" type="text" value="'+(p(r.out)?f(p(r.out)):'')+'" placeholder="-" onchange="cNum(\''+r.id+'\',\'out\',this.value)"></td>';
+
+      if(isFirst){
+        /* 최종잔액 rowspan */
+        c+='<td class="r" rowspan="'+rc+'" style="font-weight:700;vertical-align:middle" id="bal-'+key+'">'+f(bal)+'</td>';
+      }
+
+      /* 상세내역 */
+      c+='<td class="ed" onclick="fi(this)" data-v="'+esc(r.detail||'')+'"><input class="t-in" type="text" value="'+esc(r.detail||'')+'" placeholder="상세내역" onchange="cTxt(\''+r.id+'\',\'detail\',this.value)"></td>';
+      /* 비고2 */
+      c+='<td class="ed" onclick="fi(this)" data-v="'+esc(r.note2||'')+'"><input class="t-in" type="text" value="'+esc(r.note2||'')+'" placeholder="비고2" onchange="cTxt(\''+r.id+'\',\'note2\',this.value)"></td>';
 
       /* 버튼 열 */
-      if(isFirst&&rc===1){
-        c+='<td class="c np" style="white-space:nowrap">'
-          +'<button class="btn-icon" style="color:var(--h1bg);border-color:var(--h1bg);margin-right:2px" onclick="addDet(\''+key+'\')" title="상세추가">+</button>'
-          +'<button class="btn-icon" style="color:var(--red);border-color:#f5b8b8" onclick="delHdr(\''+key+'\')" title="계좌삭제">×</button>'
-          +'</td>';
-      } else if(isLast){
-        c+='<td class="c np">'
-          +'<button class="btn-icon" style="color:var(--h1bg);border-color:var(--h1bg)" onclick="addDet(\''+key+'\')" title="상세추가">+</button>'
-          +'</td>';
-      } else {
-        c+='<td class="c np">'
-          +'<button class="btn-icon" style="color:var(--red);border-color:#f5b8b8" onclick="delDet(\''+r.id+'\')" title="삭제">×</button>'
-          +'</td>';
+      var btnCell='<td class="c np" style="min-width:52px;padding:3px 4px;white-space:nowrap">';
+      if(isLast){
+        btnCell+='<button class="btn-icon" style="color:var(--h1bg);border-color:var(--h1bg)" data-key="'+key+'" onclick="addDetByKey(this)" title="추가">+</button>';
       }
+      if(!isFirst||rc===1){
+        if(rc>1&&!isFirst){
+          btnCell+='<button class="btn-icon" style="color:var(--red);border-color:#f5b8b8;margin-left:2px" data-rid="'+r.id+'" onclick="delDetById(this)" title="삭제">×</button>';
+        } else if(rc===1){
+          btnCell+='<button class="btn-icon" style="color:var(--red);border-color:#f5b8b8;margin-left:2px" data-key="'+key+'" onclick="delHdrByKey(this)" title="삭제">×</button>';
+        }
+      }
+      btnCell+='</td>';
+      c+=btnCell;
 
       tr.innerHTML=c;
       tb.appendChild(tr);
@@ -644,6 +656,9 @@ function delDet(id){
   cur().cashRows=(cur().cashRows||[]).filter(function(r){return r.id!==id;});
   dbSave();renderCash();
 }
+function addDetByKey(btn){addDet(btn.dataset.key);}
+function delHdrByKey(btn){delHdr(btn.dataset.key);}
+function delDetById(btn){delDet(btn.dataset.rid);}
 
 /* 03 대출 */
 function renderLoan(){
