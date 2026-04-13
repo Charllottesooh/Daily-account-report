@@ -383,17 +383,46 @@ function onHistChange(d) {
 function newDay() {
   const d = prompt('날짜 입력 (YYYY-MM-DD)', now());
   if (!d || !/^\d{4}-\d{2}-\d{2}$/.test(d)) return;
-  /* ▶ BUG FIX: 기존 날짜도 currentDate 반드시 설정 */
   if (DB.dates[d]) { DB.currentDate = d; renderAll(); return; }
-  const prevKey = Object.keys(DB.dates).sort().pop();
-  const prev    = DB.dates[prevKey];
-  const entry   = mkDay();
-  entry.reportDate = entry.accountingDate = d;
-  if (prev) {
-    entry.cashRows  = prev.cashRows.map(r  => ({ ...r,  id:uid(), prev: prs(r.prev)+prs(r.inc)-prs(r.out), inc:0, out:0,   detail:'' }));
-    entry.salesRows = prev.salesRows.map(r => ({ ...r,  id:uid(), prev: prs(r.prev)+prs(r.delta),            delta:0,       detail:'' }));
+
+  // 직전 날짜 찾기 (새 날짜 d 보다 작은 날짜 중 가장 최근)
+  const prevKey = Object.keys(DB.dates).sort()
+    .filter(k => k < d).pop();
+  const prevDay = prevKey ? DB.dates[prevKey] : null;
+
+  // 새 날짜 구조 생성 (샘플 데이터 없이 빈 구조)
+  const entry = {
+    reportDate: d,
+    accountingDate: d,
+    cashRows: [],
+    salesRows: []
+  };
+
+  if (prevDay) {
+    // 전일 최종잔액 → 새 날짜 전잔액으로 이월 (계좌 구조 동일하게 복사)
+    entry.cashRows = prevDay.cashRows.map(r => ({
+      id: uid(),
+      type: r.type,
+      acct: r.acct,
+      partner: r.partner,
+      prev: prs(r.prev) + prs(r.inc) - prs(r.out),  // 전일 최종잔액
+      inc: 0,
+      out: 0,
+      detail: ''
+    }));
+    entry.salesRows = prevDay.salesRows.map(r => ({
+      id: uid(),
+      type: r.type,
+      acct: r.acct,
+      label: r.label,
+      prev: prs(r.prev) + prs(r.delta),  // 전일 누계
+      delta: 0,
+      detail: ''
+    }));
   }
-  DB.dates[d] = entry; DB.currentDate = d;
+
+  DB.dates[d] = entry;
+  DB.currentDate = d;
   dbSave(); renderAll();
 }
 
