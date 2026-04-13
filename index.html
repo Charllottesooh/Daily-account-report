@@ -523,7 +523,7 @@ function renderSales() {
       `<td class="c"><span class="tag">${esc(r.type)}</span></td>`+
       `<td class="acct-txt">${esc(r.acct)}</td>`+
       `<td class="editable" onclick="focIn(this)"><input class="txt-in" type="text" value="${esc(r.label)}" placeholder="항목" data-tbl="sales" data-idx="${i}" data-key="label" onblur="onTxtBlur(this)"></td>`+
-      `<td class="r bal-cell">${fmt(prev)}</td>`+
+      `<td class="r editable is-bal" onclick="focIn(this)"><input class="num-in is-bal" type="text" value="${prev?fmt(prev):''}" placeholder="0" data-tbl="sales" data-idx="${i}" data-key="prev" onblur="onNumBlur(this)"></td>`+
       `<td class="r editable is-plus" onclick="focIn(this)"><input class="num-in is-plus" type="text" value="${delta?fmt(delta):''}" placeholder="—" data-tbl="sales" data-idx="${i}" data-key="delta" onblur="onNumBlur(this)"></td>`+
       `<td class="r bal-cell js-stot" style="font-weight:700">${fmt(total)}</td>`+
       `<td class="editable" onclick="focIn(this)"><input class="txt-in" type="text" value="${esc(r.detail)}" placeholder="상세내역" data-tbl="sales" data-idx="${i}" data-key="detail" onblur="onTxtBlur(this)"></td>`+
@@ -544,7 +544,7 @@ function renderCash() {
       `<td class="c"><span class="tag">${esc(r.type)}</span></td>`+
       `<td class="acct-txt">${esc(r.acct)}</td>`+
       `<td class="editable" onclick="focIn(this)"><input class="txt-in" type="text" value="${esc(r.partner)}" placeholder="거래처" data-tbl="cash" data-idx="${i}" data-key="partner" onblur="onTxtBlur(this)"></td>`+
-      `<td class="r bal-cell">${fmt(prev)}</td>`+
+      `<td class="r editable is-bal" onclick="focIn(this)"><input class="num-in is-bal" type="text" value="${prev?fmt(prev):''}" placeholder="0" data-tbl="cash" data-idx="${i}" data-key="prev" onblur="onNumBlur(this)"></td>`+
       `<td class="r editable is-plus" onclick="focIn(this)"><input class="num-in is-plus" type="text" value="${inc?fmt(inc):''}" placeholder="—" data-tbl="cash" data-idx="${i}" data-key="inc" onblur="onNumBlur(this)"></td>`+
       `<td class="r editable is-minus" onclick="focIn(this)"><input class="num-in is-minus" type="text" value="${out?fmt(out):''}" placeholder="—" data-tbl="cash" data-idx="${i}" data-key="out" onblur="onNumBlur(this)"></td>`+
       `<td class="r bal-cell js-bal">${fmt(bal)}</td>`+
