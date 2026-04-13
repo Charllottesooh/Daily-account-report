@@ -232,13 +232,14 @@ td.ed:focus-within{background:#fff8f0;outline:1px solid var(--h1bg);outline-offs
   <div class="section">
     <div class="sec-head sec-head-02">
       <div class="sec-title"><span class="sec-num">02</span>현금 · 예금<span class="sec-sub">계좌별 입출금 현황</span></div>
+      <button class="sec-add-btn no-print" onclick="loadMasterAccounts()" title="계좌 마스터에서 신규 계좌를 불러옵니다">🔄 불러오기</button>
     </div>
     <div class="tbl-wrap">
       <table style="table-layout:fixed">
         <colgroup>
-          <col style="width:55px"><col style="width:115px"><col style="width:60px">
-          <col style="width:100px"><col style="width:100px"><col style="width:100px">
-          <col style="width:100px"><col><col style="width:55px"><col style="width:26px">
+          <col style="width:58px"><col style="width:105px"><col style="width:50px">
+          <col style="width:95px"><col style="width:90px"><col style="width:90px">
+          <col style="width:95px"><col style="width:96px"><col style="width:48px"><col style="width:26px">
         </colgroup>
         <thead><tr>
           <th>은행명</th><th>계좌번호</th><th>비고</th>
@@ -579,11 +580,15 @@ function renderCash(){
         } else {
           c+='<td class="r ed" rowspan="'+rc+'" onclick="fi(this)" data-v="'+(f(prev)||'')+'" style="vertical-align:middle"><input class="n-in" type="text" value="'+(f(prev)||'')+'" placeholder="0" onblur="cPrev(\''+hdr.id+'\',this.value)"></td>';
         }
-        c+='<td class="r" rowspan="'+rc+'" style="font-weight:700;vertical-align:middle">'+f(bal)+'</td>';
       }
 
       c+='<td class="r ed pos" onclick="fi(this)" data-v="'+(p(r.inc)?f(p(r.inc)):'')+'"><input class="n-in pos" type="text" value="'+(p(r.inc)?f(p(r.inc)):'')+'" placeholder="—" onblur="cNum(\''+r.id+'\',\'inc\',this.value)"></td>';
       c+='<td class="r ed neg" onclick="fi(this)" data-v="'+(p(r.out)?f(p(r.out)):'')+'"><input class="n-in neg" type="text" value="'+(p(r.out)?f(p(r.out)):'')+'" placeholder="—" onblur="cNum(\''+r.id+'\',\'out\',this.value)"></td>';
+
+      if(isFirst){
+        c+='<td class="r" rowspan="'+rc+'" style="font-weight:700;vertical-align:middle;font-size:12px">'+f(bal)+'</td>';
+      }
+
       c+='<td class="ed" onclick="fi(this)" data-v="'+esc(r.detail||'')+'"><input class="t-in" type="text" value="'+esc(r.detail||'')+'" placeholder="상세내역" onblur="cTxt(\''+r.id+'\',\'detail\',this.value)"></td>';
       c+='<td class="ed" onclick="fi(this)" data-v="'+esc(r.note2||'')+'"><input class="t-in" type="text" value="'+esc(r.note2||'')+'" placeholder="비고2" onblur="cTxt(\''+r.id+'\',\'note2\',this.value)"></td>';
 
@@ -643,6 +648,40 @@ function delHdr(masterKey){
 function delDet(id){
   cur().cashRows=(cur().cashRows||[]).filter(function(r){return r.id!==id;});
   dbSave();renderCash();
+}
+
+/* 불러오기: 마스터에서 아직 없는 계좌를 현재 날짜에 추가 */
+function loadMasterAccounts(){
+  const day=cur();
+  if(!day.cashRows) day.cashRows=[];
+  const existIds=new Set(day.cashRows.map(function(r){return r.masterId||r.id;}));
+  const sorted=[...DB.masters].sort(function(a,b){return a.code.localeCompare(b.code);});
+  let added=0;
+  /* 전일 데이터에서 전잔액 계산 */
+  const prevKey=Object.keys(DB.dates).sort().filter(function(k){return k<DB.currentDate;}).pop();
+  const prevDay=prevKey?DB.dates[prevKey]:null;
+  sorted.forEach(function(m){
+    if(existIds.has(m.id)) return;
+    let prev=m.initPrev||0;
+    if(prevDay){
+      const pRows=(prevDay.cashRows||[]).filter(function(r){return r.masterId===m.id;});
+      if(pRows.length){
+        const hdr=pRows.find(function(r){return r.isHdr;})||pRows[0];
+        const base=p(hdr.prev);
+        const totInc=pRows.reduce(function(s,r){return s+p(r.inc);},0);
+        const totOut=pRows.reduce(function(s,r){return s+p(r.out);},0);
+        prev=base+totInc-totOut;
+      }
+    }
+    day.cashRows.push({id:uid(),masterId:m.id,code:m.code,bank:m.bank,acct:m.acct,note:m.note,prev:prev,prevLocked:!!prevDay,isHdr:true,inc:0,out:0,detail:'',note2:''});
+    added++;
+  });
+  if(added>0){
+    dbSave();renderCash();
+    alert(added+'개의 신규 계좌를 불러왔습니다.');
+  } else {
+    alert('추가할 신규 계좌가 없습니다.\n(모든 마스터 계좌가 이미 반영되어 있습니다)');
+  }
 }
 
 /* 03 대출 */
