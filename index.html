@@ -598,8 +598,10 @@ function renderCash(){
         }
         cells+=
           `<td class="editable is-area" onclick="focIn(this)" data-pv="${esc(det.detail||'')}"><textarea class="area-in" rows="1" data-did="${det.id}" data-k="detail" onblur="dBlur(this)">${esc(det.detail||'')}</textarea></td>`+
-          `<td class="editable is-txt" onclick="focIn(this)" data-pv="${esc(det.note2||'')}"><input class="txt-in" type="text" value="${esc(det.note2||'')}" placeholder="비고2" data-did="${det.id}" data-k="note2" onblur="dTxtBlur(this)"></td>`+
-          `<td class="c no-print" style="white-space:nowrap">${isLast?'<button class="add-det-btn" onclick="addCashDetail(\'${a.id}\')" title="이 계좌에 상세추가">+</button>':''}<button class="del-btn" onclick="delDetail('${det.id}')">×</button></td>`;
+          `<td class="editable is-txt" onclick="focIn(this)" data-pv="${esc(det.note2||'')}"><input class="txt-in" type="text" value="${esc(det.note2||'')}" placeholder="비고2" data-did="${det.id}" data-k="note2" onblur="dTxtBlur(this)"></td>`;
+        const detBtns=(isLast?'<button class="add-det-btn" data-aid="'+a.id+'" onclick="addDetById(this)" title="이 계좌에 상세추가">+</button>':'')
+          +'<button class="del-btn" data-did="'+det.id+'" onclick="delDetById(this)">×</button>';
+        cells+='<td class="c no-print" style="white-space:nowrap">'+detBtns+'</td>';
         tr.innerHTML=cells;
         tb.appendChild(tr);
       });
@@ -671,6 +673,14 @@ function addCashDetail(aid){
   if(!cur().cashDetails)cur().cashDetails=[];
   cur().cashDetails.push({id:uid(),acct:a.acct||a.id,aid:a.id,inc:0,out:0,detail:'',note2:''});
   dbSave();renderCash();
+}
+function addDetById(btn){
+  const aid=btn.dataset.aid;
+  addCashDetail(aid);
+}
+function delDetById(btn){
+  const did=btn.dataset.did;
+  delDetail(did);
 }
 function delAcct(aid){
   cur().accounts=(cur().accounts||[]).filter(a=>a.id!==aid);
