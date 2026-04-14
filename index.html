@@ -629,10 +629,19 @@ function rDeposits(){
     <tfoot style="background:#f0f7ff">
       <tr>
         <td colspan="4" style="padding:7px 10px;font-weight:700">합계</td>
-        <td class="tr" style="padding:7px 10px;font-weight:700">${fmt(accList.reduce((s,a)=>s+getPrevBalance(a.id,SEL_DATE),0))}</td>
+        <td class="tr" style="padding:7px 10px;font-weight:700">${(()=>{
+          // 전잔액 합계: 각 계좌의 당일 첫 번째 건의 전잔액, 없으면 전일 최종잔액
+          return fmt(accList.reduce((s,a)=>{
+            const firstDep=DB.deposits.filter(d=>d.account_id===a.id&&d.date===SEL_DATE).sort((x,y)=>(x.seq||0)-(y.seq||0))[0];
+            return s+(firstDep?firstDep.prev_balance:getPrevBalance(a.id,SEL_DATE,''));
+          },0));
+        })()}</td>
         <td class="tr" style="padding:7px 10px;font-weight:700;color:var(--pri)">${fmt(DB.deposits.filter(d=>d.date===SEL_DATE).reduce((s,d)=>s+(d.in_amount||0),0))}</td>
         <td class="tr" style="padding:7px 10px;font-weight:700;color:var(--err)">${fmt(DB.deposits.filter(d=>d.date===SEL_DATE).reduce((s,d)=>s+(d.out_amount||0),0))}</td>
-        <td class="tr" style="padding:7px 10px;font-weight:700;color:var(--ok)">${fmt(accList.reduce((s,a)=>s+getTodayBalance(a.id,SEL_DATE),0))}</td>
+        <td class="tr" style="padding:7px 10px;font-weight:700;color:var(--ok)">${(()=>{
+          // 최종잔액 합계: 각 계좌의 당일 마지막 건의 최종잔액 합산 (계좌별 1개만)
+          return fmt(accList.reduce((s,a)=>s+getTodayBalance(a.id,SEL_DATE),0));
+        })()}</td>
         <td colspan="3"></td>
       </tr>
     </tfoot>
