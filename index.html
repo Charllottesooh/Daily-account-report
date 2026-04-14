@@ -116,7 +116,47 @@ tbody tr:last-child td{border-bottom:none}
 .report-section{margin-bottom:20px}
 .report-title{font-size:13px;font-weight:800;color:var(--tx);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--pri)}
 @media(max-width:768px){.sidebar{width:52px}.slogo h1,.slogo span,.ni span,.nsec,.sbot span{display:none}.sgrid{grid-template-columns:repeat(2,1fr)}.g22,.g23,.g24{grid-template-columns:1fr}}
-@media print{.sidebar,.topbar,.no-print,.datebar{display:none!important}.content{padding:0}body{background:#fff}}
+@media print{
+  @page{size:A4 landscape;margin:12mm 10mm 12mm 10mm}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  .sidebar,.topbar,.no-print,.datebar{display:none!important}
+  body{background:#fff;font-size:11px}
+  .app{display:block}
+  .main{width:100%;overflow:visible}
+  .content{padding:0;width:100%;overflow:visible}
+  table{width:100%;table-layout:auto;font-size:10px}
+  th,td{padding:5px 7px!important;font-size:10px}
+  .card{border:1px solid #ccc;border-radius:4px;margin-bottom:8px;page-break-inside:avoid}
+  .sgrid{grid-template-columns:repeat(4,1fr);gap:8px}
+  .sc{padding:8px 10px}
+  .sv{font-size:15px}
+  .tw{overflow:visible}
+  /* 인쇄 헤더 */
+  .print-header{display:block!important;text-align:center;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid #0a2e23}
+  .print-header h1{font-size:20px;font-weight:900;color:#0a2e23;letter-spacing:1px}
+  .print-header .print-subtitle{font-size:13px;color:#64748b;margin-top:4px}
+  .print-header .print-date{font-size:12px;color:#64748b;margin-top:2px}
+  /* 인쇄 푸터 */
+  .print-footer{display:block!important;text-align:center;margin-top:14px;padding-top:8px;border-top:1px solid #ccc;font-size:10px;color:#94a3b8}
+  .g2{gap:8px}
+  .g22{grid-template-columns:1fr 1fr}
+  /* 테이블 가로 자동 맞춤 */
+  .tw{overflow:visible!important}
+  table{width:100%!important;font-size:9px!important}
+  th{font-size:9px!important;padding:4px 5px!important}
+  td{font-size:9px!important;padding:4px 5px!important}
+  /* 코드배지 */
+  .code-badge{font-size:8px;padding:1px 4px}
+  .badge{font-size:8px;padding:1px 5px}
+  /* 버튼 숨김 */
+  .btn,.no-print{display:none!important}
+  /* 카드 */
+  .card{margin-bottom:6px!important;page-break-inside:avoid}
+  /* 대시보드 그리드 */
+  .sgrid{display:grid!important;grid-template-columns:repeat(4,1fr)!important}
+}
+/* 화면에서는 인쇄헤더/푸터 숨김 */
+.print-header,.print-footer{display:none}
 </style>
 </head>
 <body>
@@ -236,7 +276,16 @@ function go(page){
 function rc(){
   const el=document.getElementById('pcont');
   const R={dash:rDash,accounts:rAccounts,loans:rLoans,sales:rSales,deposits:rDeposits,report:rReport,settings:rSettings};
-  el.innerHTML=(R[PAGE]||rDash)();
+  const pageContent=(R[PAGE]||rDash)();
+  const titleMap={dash:'대시보드',accounts:'계좌내역',loans:'대출내역',sales:'매출/입금내역',deposits:'예금내역',report:'월별 리포트',settings:'설정'};
+  const pageTitle=titleMap[PAGE]||PAGE;
+  const printHeader=`<div class="print-header">
+    <h1>일일시재보고</h1>
+    <div class="print-subtitle">${pageTitle}</div>
+    <div class="print-date">조회일자: ${SEL_DATE} &nbsp;|&nbsp; 출력일시: ${new Date().toLocaleString('ko-KR')}</div>
+  </div>`;
+  const printFooter=`<div class="print-footer">일일시재보고 &copy; ${new Date().getFullYear()} &nbsp;|&nbsp; ${DB.settings.company||''}</div>`;
+  el.innerHTML=printHeader+pageContent+printFooter;
 }
 
 // ═══ DATE BAR ═══
