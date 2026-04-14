@@ -192,26 +192,34 @@ function nextCode(arr,prefix){
 
 // 전일 예금잔액 조회
 function getPrevBalance(accountId, date, excludeId){
-  // 1순위: 당일 같은 계좌의 마지막 건 최종잔액 (건별 연속 입력 시 이전 건 최종잔액 자동세팅)
+  // 1순위: 당일 같은 계좌의 마지막 건 최종잔액 (seq 순번 기준 정렬)
   const sameDay=DB.deposits
     .filter(d=>d.account_id===accountId && d.date===date && d.id!==excludeId)
-    .sort((a,b)=>a.created_at.localeCompare(b.created_at));
+    .sort((a,b)=>(a.seq||0)-(b.seq||0));
   if(sameDay.length>0) return sameDay[sameDay.length-1].final_balance||0;
-  // 2순위: 전날 이전 가장 최근 건의 최종잔액
+  // 2순위: 전날 이전 가장 최근 건의 최종잔액 (날짜+seq 기준)
   const prev=DB.deposits
     .filter(d=>d.account_id===accountId && d.date<date)
-    .sort((a,b)=>b.date.localeCompare(a.date)||b.created_at.localeCompare(a.created_at));
+    .sort((a,b)=>b.date.localeCompare(a.date)||(b.seq||0)-(a.seq||0));
   if(prev.length>0) return prev[0].final_balance||0;
   // 3순위: 계좌 기초잔액
   const acc=DB.accounts.find(a=>a.id===accountId);
   return acc?acc.initial_balance||0:0;
 }
 
-// 당일 예금최종잔액
+// 당일 예금 최종잔액 (seq 기준 마지막 건)
 function getTodayBalance(accountId, date){
-  const todays=DB.deposits.filter(d=>d.account_id===accountId && d.date===date).sort((a,b)=>b.created_at.localeCompare(a.created_at));
+  const todays=DB.deposits
+    .filter(d=>d.account_id===accountId && d.date===date)
+    .sort((a,b)=>(a.seq||0)-(b.seq||0));
   if(todays.length>0) return todays[todays.length-1].final_balance||0;
   return getPrevBalance(accountId,date);
+}
+
+// 당일 계좌의 다음 seq 번호
+function nextSeq(accountId, date){
+  const todays=DB.deposits.filter(d=>d.account_id===accountId && d.date===date);
+  return todays.length>0?Math.max(...todays.map(d=>d.seq||0))+1:1;
 }
 
 // ═══ NAVIGATION ═══
@@ -589,7 +597,7 @@ function rDeposits(){
       <th class="tc no-print" style="width:80px">관리</th>
     </tr></thead>
     <tbody>${accList.length?accList.map(a=>{
-      const dayDeps=DB.deposits.filter(d=>d.account_id===a.id&&d.date===SEL_DATE).sort((x,y)=>x.created_at.localeCompare(y.created_at));
+      const dayDeps=DB.deposits.filter(d=>d.account_id===a.id&&d.date===SEL_DATE).sort((x,y)=>(x.seq||0)-(y.seq||0));
       if(dayDeps.length===0){
         const prev=getPrevBalance(a.id,SEL_DATE);
         return`<tr style="background:#fafafa">
@@ -663,7 +671,15 @@ function autoSetPrevBal(excludeId){
   if(!accId)return;
   const prev=getPrevBalance(accId,date,excludeId||'');
   const prevEl=document.getElementById('dp-prev');
-  if(prevEl){prevEl.value=fmt(prev);calcDepFinal();}
+  const finalEl=document.getElementById('dp-final');
+  if(prevEl){
+    prevEl.value=fmt(prev);
+    // 입금/출금이 비어있으면 최종잔액도 전잔액으로 초기화
+    const inA=parseFloat((document.getElementById('dp-in')?.value||'0').replace(/,/g,''))||0;
+    const outA=parseFloat((document.getElementById('dp-out')?.value||'0').replace(/,/g,''))||0;
+    if(finalEl&&inA===0&&outA===0) finalEl.value=fmt(prev);
+    calcDepFinal();
+  }
 }
 
 function calcDepFinal(){
@@ -689,8 +705,13 @@ function saveDep(id){
     memo:document.getElementById('dp-memo').value,
     created_at:new Date().toISOString()
   };
-  if(id){Object.assign(DB.deposits.find(x=>x.id===id),d);}
-  else{DB.deposits.push({id:gid(),...d});}
+  if(id){
+    Object.assign(DB.deposits.find(x=>x.id===id),d);
+  }else{
+    // 신규 입력 시 seq 자동 부여 (당일 해당 계좌의 마지막 번호 + 1)
+    d.seq=nextSeq(d.account_id, d.date);
+    DB.deposits.push({id:gid(),...d});
+  }
   svDB();closeM();rc();
 }
 function delDep(id){
@@ -914,6 +935,22 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM();});
 
 // ═══ INIT ═══
 ldDB();
+// 기존 데이터 seq 마이그레이션 (seq 없는 데이터에 순번 부여)
+(function migrateSeq(){
+  const grouped={};
+  DB.deposits.forEach(d=>{
+    if(d.seq) return; // 이미 seq 있으면 건너뜀
+    const key=d.account_id+'_'+d.date;
+    if(!grouped[key]) grouped[key]=[];
+    grouped[key].push(d);
+  });
+  Object.values(grouped).forEach(list=>{
+    // created_at 순으로 정렬 후 seq 부여
+    list.sort((a,b)=>(a.created_at||'').localeCompare(b.created_at||''));
+    list.forEach((d,i)=>d.seq=i+1);
+  });
+  if(Object.keys(grouped).length>0) svDB();
+})();
 document.getElementById('today-display').textContent='📅 '+today();
 go('dash');
 </script>
