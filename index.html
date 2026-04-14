@@ -191,13 +191,18 @@ function nextCode(arr,prefix){
 }
 
 // 전일 예금잔액 조회
-function getPrevBalance(accountId, date){
-  // 해당 계좌의 date 이전 가장 최근 예금내역의 최종잔액
+function getPrevBalance(accountId, date, excludeId){
+  // 1순위: 당일 같은 계좌의 마지막 건 최종잔액 (건별 연속 입력 시 이전 건 최종잔액 자동세팅)
+  const sameDay=DB.deposits
+    .filter(d=>d.account_id===accountId && d.date===date && d.id!==excludeId)
+    .sort((a,b)=>a.created_at.localeCompare(b.created_at));
+  if(sameDay.length>0) return sameDay[sameDay.length-1].final_balance||0;
+  // 2순위: 전날 이전 가장 최근 건의 최종잔액
   const prev=DB.deposits
     .filter(d=>d.account_id===accountId && d.date<date)
-    .sort((a,b)=>b.date.localeCompare(a.date));
+    .sort((a,b)=>b.date.localeCompare(a.date)||b.created_at.localeCompare(a.created_at));
   if(prev.length>0) return prev[0].final_balance||0;
-  // 없으면 계좌 기초잔액
+  // 3순위: 계좌 기초잔액
   const acc=DB.accounts.find(a=>a.id===accountId);
   return acc?acc.initial_balance||0:0;
 }
@@ -630,12 +635,12 @@ function showDepModal(accId, depId){
   const dep=depId?DB.deposits.find(x=>x.id===depId):null;
   const acc=accId?DB.accounts.find(x=>x.id===accId):null;
   // 전잔액 자동세팅
-  const prevBal=dep?dep.prev_balance:getPrevBalance(accId,SEL_DATE);
+  const prevBal=dep?dep.prev_balance:getPrevBalance(accId,SEL_DATE,'');
   openM('mmd',dep?'예금내역 수정':'예금 입력',`
     <div class="g2 g22">
-      <div class="fg"><label class="fl">날짜 *</label><input class="fi" id="dp-date" type="date" value="${dep?dep.date:SEL_DATE}"></div>
+      <div class="fg"><label class="fl">날짜 *</label><input class="fi" id="dp-date" type="date" value="${dep?dep.date:SEL_DATE}" onchange="autoSetPrevBal('${dep?dep.id:''}')"></div>
       <div class="fg"><label class="fl">계좌 *</label>
-        <select class="fs" id="dp-acc" onchange="autoSetPrevBal()">
+        <select class="fs" id="dp-acc" onchange="autoSetPrevBal('${dep?dep.id:''}')">
           <option value="">계좌 선택</option>
           ${[...DB.accounts].sort((a,b)=>a.code.localeCompare(b.code)).map(a=>`<option value="${a.id}" ${(dep?dep.account_id:accId)===a.id?'selected':''}>[${a.code}] ${a.bank_name} ${a.alias?'('+a.alias+')':''}</option>`).join('')}
         </select>
@@ -652,11 +657,11 @@ function showDepModal(accId, depId){
   );
 }
 
-function autoSetPrevBal(){
+function autoSetPrevBal(excludeId){
   const accId=document.getElementById('dp-acc')?.value;
   const date=document.getElementById('dp-date')?.value||SEL_DATE;
   if(!accId)return;
-  const prev=getPrevBalance(accId,date);
+  const prev=getPrevBalance(accId,date,excludeId||'');
   const prevEl=document.getElementById('dp-prev');
   if(prevEl){prevEl.value=fmt(prev);calcDepFinal();}
 }
