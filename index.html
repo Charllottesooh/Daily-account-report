@@ -67,6 +67,8 @@ thead{background:#f8fafc}
 th{padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--bd)}
 td{padding:9px 10px;border-bottom:1px solid var(--bd);color:var(--tx);vertical-align:middle}
 tbody tr:hover{background:#f8fafc}
+tbody tr.row-empty{background:#fff!important}
+tbody tr.row-empty:hover{background:#f8fafc}
 tbody tr:last-child td{border-bottom:none}
 .tr{text-align:right}.tc{text-align:center}
 .badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700}
@@ -157,6 +159,14 @@ tbody tr:last-child td{border-bottom:none}
 }
 /* 화면에서는 인쇄헤더/푸터 숨김 */
 .print-header,.print-footer{display:none}
+/* 인쇄 날짜 강조 */
+@media print{
+  .print-date b{color:#1a56db!important;font-size:14px!important;font-weight:900!important}
+  /* 테이블 행 흰색 배경 */
+  tbody tr{background:#fff!important}
+  tbody tr:nth-child(even){background:#f9fafb!important}
+  tbody tr.row-empty{background:#fff!important}
+}
 </style>
 </head>
 <body>
@@ -282,7 +292,7 @@ function rc(){
   const printHeader=`<div class="print-header">
     <h1>일일시재보고</h1>
     <div class="print-subtitle">${pageTitle}</div>
-    <div class="print-date">조회일자: ${SEL_DATE} &nbsp;|&nbsp; 출력일시: ${new Date().toLocaleString('ko-KR')}</div>
+    <div class="print-date">조회일자: <b style="color:#1a56db;font-size:14px">${SEL_DATE}</b> &nbsp;|&nbsp; 출력일시: ${new Date().toLocaleString('ko-KR')}</div>
   </div>`;
   const printFooter=`<div class="print-footer">일일시재보고 &copy; ${new Date().getFullYear()} &nbsp;|&nbsp; ${DB.settings.company||''}</div>`;
   el.innerHTML=printHeader+pageContent+printFooter;
@@ -634,7 +644,7 @@ function rDeposits(){
   return`${rDateBar()}
   <div class="flex gap8 aic fw" style="margin-bottom:12px">
     <button class="btn bp no-print" onclick="showDepModal()">+ 예금 입력</button>
-    <span class="tsm tmuted" style="margin-left:4px">${SEL_DATE} 기준 · 전잔액은 전일 자동세팅</span>
+    
   </div>
   <div class="card"><div class="tw"><table style="table-layout:fixed;width:100%">
     <thead><tr>
@@ -649,7 +659,7 @@ function rDeposits(){
       const dayDeps=DB.deposits.filter(d=>d.account_id===a.id&&d.date===SEL_DATE).sort((x,y)=>(x.seq||0)-(y.seq||0));
       if(dayDeps.length===0){
         const prev=getPrevBalance(a.id,SEL_DATE);
-        return`<tr style="background:#fafafa">
+        return`<tr class="row-empty">
           <td><span class="code-badge">${a.code}</span></td>
           <td><b>${a.bank_name}</b></td><td class="tsm tmuted">${a.account_no||''}</td>
           <td class="tsm tmuted tc">-</td>
