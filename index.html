@@ -423,6 +423,53 @@ function rDash(){
     </table></div>
   </div>
 
+  <!-- 월별 일별 매출/입금 누계 -->
+  ${(()=>{
+    const ymSales=DB.sales.filter(s=>s.date.slice(0,7)===SEL_YM);
+    const ymByDate={};
+    ymSales.forEach(s=>{if(!ymByDate[s.date])ymByDate[s.date]={sales:0,deposits:0};if(s.type==='sale')ymByDate[s.date].sales+=s.amount;else ymByDate[s.date].deposits+=s.amount;});
+    const ymDates=Object.keys(ymByDate).sort();
+    if(!ymDates.length) return '';
+    const ymTotalSale=ymDates.reduce((s,d)=>s+(ymByDate[d].sales||0),0);
+    const ymTotalDep=ymDates.reduce((s,d)=>s+(ymByDate[d].deposits||0),0);
+    return`<div class="card" style="margin-bottom:14px"><div class="ch">
+      <span class="ct">일별 매출/입금 현황 (${SEL_YM})</span>
+      <button class="btn bp no-print" style="font-size:11px" onclick="go('report')">월별 리포트</button>
+    </div>
+    <div class="tw"><table>
+      <thead><tr>
+        <th>날짜</th>
+        <th class="tr">매출</th>
+        <th class="tr">누계 매출</th>
+        <th class="tr">입금</th>
+        <th class="tr">누계 입금</th>
+        <th class="tr">차액 (매출-입금)</th>
+      </tr></thead>
+      <tbody>${ymDates.map((d,i)=>{
+        const cumSale=ymDates.slice(0,i+1).reduce((s,dt)=>s+(ymByDate[dt]?.sales||0),0);
+        const cumDep=ymDates.slice(0,i+1).reduce((s,dt)=>s+(ymByDate[dt]?.deposits||0),0);
+        const diff=(ymByDate[d].sales||0)-(ymByDate[d].deposits||0);
+        const isToday=d===SEL_DATE;
+        return`<tr style="${isToday?'background:#fef9e7;font-weight:700;':''}">
+          <td><b style="${isToday?'color:var(--pri)':''}">${d}${isToday?' ◀':''}</b></td>
+          <td class="tr amt-out">${ymByDate[d].sales?fmt(ymByDate[d].sales):'-'}</td>
+          <td class="tr" style="color:var(--mu)">${fmt(cumSale)}</td>
+          <td class="tr amt-in">${ymByDate[d].deposits?fmt(ymByDate[d].deposits):'-'}</td>
+          <td class="tr" style="color:var(--mu)">${fmt(cumDep)}</td>
+          <td class="tr" style="font-weight:700;color:${diff>0?'var(--err)':diff<0?'var(--pri)':'var(--mu)'}">${diff>0?'+'+fmt(diff):diff<0?fmt(diff):'-'}</td>
+        </tr>`;
+      }).join('')}</tbody>
+      <tfoot style="background:#f0f7ff"><tr>
+        <td style="padding:7px 10px;font-weight:700">합계</td>
+        <td class="tr" style="padding:7px 10px;font-weight:700;color:var(--err)">${fmt(ymTotalSale)}</td>
+        <td class="tr" style="padding:7px 10px;color:var(--mu)">${fmt(ymTotalSale)}</td>
+        <td class="tr" style="padding:7px 10px;font-weight:700;color:var(--pri)">${fmt(ymTotalDep)}</td>
+        <td class="tr" style="padding:7px 10px;color:var(--mu)">${fmt(ymTotalDep)}</td>
+        <td class="tr" style="padding:7px 10px;font-weight:700;color:${ymTotalSale-ymTotalDep>0?'var(--err)':'var(--pri)'}">${ymTotalSale-ymTotalDep>0?'+'+fmt(ymTotalSale-ymTotalDep):fmt(ymTotalSale-ymTotalDep)}</td>
+      </tr></tfoot>
+    </table></div></div>`;
+  })()}
+
   <!-- 당일 매출/입금 -->
   <div class="g2 g22">
     <div class="card"><div class="ch"><span class="ct">당일 매출/입금 내역</span><button class="btn bp no-print" style="font-size:11px" onclick="go('sales')">입력</button></div>
@@ -884,26 +931,35 @@ function rReport(){
   <!-- 일별 매출/입금 추이 -->
   <div class="card report-section" style="margin-bottom:14px"><div class="ch"><span class="ct">일별 매출/입금 현황 (${ym})</span></div>
     <div class="tw"><table>
-      <thead><tr><th>날짜</th><th class="tr">매출</th><th class="tr">입금</th><th class="tr">합계</th><th class="tr">누계 매출</th><th class="tr">누계 입금</th></tr></thead>
+      <thead><tr>
+        <th>날짜</th>
+        <th class="tr">매출</th>
+        <th class="tr">누계 매출</th>
+        <th class="tr">입금</th>
+        <th class="tr">누계 입금</th>
+        <th class="tr">차액 (매출-입금)</th>
+      </tr></thead>
       <tbody>${dates.length?dates.map((d,i)=>{
         const cumSale=dates.slice(0,i+1).reduce((s,dt)=>s+(byDate[dt]?.sales||0),0);
         const cumDep=dates.slice(0,i+1).reduce((s,dt)=>s+(byDate[dt]?.deposits||0),0);
+        const diff=(byDate[d].sales||0)-(byDate[d].deposits||0);
         return`<tr>
           <td><b>${d}</b></td>
           <td class="tr amt-out">${byDate[d].sales?fmt(byDate[d].sales):'-'}</td>
+          <td class="tr" style="color:var(--mu)">${fmt(cumSale)}</td>
           <td class="tr amt-in">${byDate[d].deposits?fmt(byDate[d].deposits):'-'}</td>
-          <td class="tr bold">${fmt((byDate[d].sales||0)+(byDate[d].deposits||0))}</td>
-          <td class="tr tmuted">${fmt(cumSale)}</td>
-          <td class="tr tmuted">${fmt(cumDep)}</td>
+          <td class="tr" style="color:var(--mu)">${fmt(cumDep)}</td>
+          <td class="tr" style="font-weight:700;color:${diff>0?'var(--err)':diff<0?'var(--pri)':'var(--mu)'}">${diff>0?'+'+fmt(diff):fmt(diff)}</td>
         </tr>`;
       }).join(''):'<tr><td colspan="6" class="tc tmuted" style="padding:20px">해당 월 데이터 없음</td></tr>'}
       </tbody>
       ${dates.length?`<tfoot style="background:#f0f7ff"><tr>
         <td style="padding:7px 10px;font-weight:700">합계</td>
         <td class="tr" style="padding:7px 10px;font-weight:700;color:var(--err)">${fmt(totalSale)}</td>
+        <td class="tr" style="padding:7px 10px;color:var(--mu)">${fmt(totalSale)}</td>
         <td class="tr" style="padding:7px 10px;font-weight:700;color:var(--pri)">${fmt(totalDep)}</td>
-        <td class="tr" style="padding:7px 10px;font-weight:700">${fmt(totalSale+totalDep)}</td>
-        <td colspan="2"></td>
+        <td class="tr" style="padding:7px 10px;color:var(--mu)">${fmt(totalDep)}</td>
+        <td class="tr" style="padding:7px 10px;font-weight:700;color:${totalSale-totalDep>0?'var(--err)':'var(--pri)'}">${totalSale-totalDep>0?'+'+fmt(totalSale-totalDep):fmt(totalSale-totalDep)}</td>
       </tr></tfoot>`:''}
     </table></div>
   </div>
