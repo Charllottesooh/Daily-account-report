@@ -263,6 +263,7 @@ tbody tr:last-child td{border-bottom:none}
     <div class="tba">
       <span id="today-display" style="font-size:12px;color:var(--mu)"></span>
       <button class="btn bs no-print" style="font-size:11px;padding:5px 9px" onclick="window.print()">🖨 인쇄</button>
+      <button class="btn bs no-print" style="font-size:11px;padding:5px 9px;color:var(--ok)" onclick="saveAsImage()">🖼 이미지저장</button>
       <button class="btn bs no-print" style="font-size:11px;padding:5px 9px" onclick="doExport()">📤 엑셀</button>
       <input type="file" id="impf" accept=".xlsx,.xls" style="display:none" onchange="handleImp(event)">
     </div>
@@ -273,6 +274,7 @@ tbody tr:last-child td{border-bottom:none}
 <div id="mc"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 // ═══ DB ═══
 let DB={
@@ -1017,6 +1019,87 @@ async function gsSync(){
     const now=new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
     if(msg){msg.textContent=d.status==='success'?`✅ 동기화 완료 ${now}`:'❌ 오류: '+(d.msg||'');msg.style.color=d.status==='success'?'var(--ok)':'var(--err)';}
   }catch(e){if(msg){msg.textContent='❌ 연결 실패: '+e.message;msg.style.color='var(--err)';}}
+}
+
+// ═══ IMAGE SAVE ═══
+function saveAsImage(){
+  const pageTitle=document.getElementById('ptitle')?.textContent||'일일시재보고';
+  const fileName='일일시재보고_'+pageTitle+'_'+SEL_DATE+'.png';
+
+  // 인쇄헤더/푸터 임시 표시
+  const printHeaders=document.querySelectorAll('.print-header,.print-footer');
+  printHeaders.forEach(el=>el.style.display='block');
+
+  // 캡처 대상: pcont (콘텐츠 영역 전체)
+  const target=document.getElementById('pcont');
+  if(!target){alert('캡처할 콘텐츠가 없습니다');return;}
+
+  // 로딩 표시
+  const loadingDiv=document.createElement('div');
+  loadingDiv.id='img-loading';
+  loadingDiv.innerHTML='<div style="position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:9999;display:flex;align-items:center;justify-content:center"><div style="background:#fff;border-radius:12px;padding:28px 40px;text-align:center;font-size:14px;font-weight:700;color:#1e293b">🖼 이미지 생성 중...<br><span style="font-size:11px;color:#64748b;font-weight:400;margin-top:6px;display:block">잠시 기다려주세요</span></div></div>';
+  document.body.appendChild(loadingDiv);
+
+  // A4 가로 기준 (96dpi: 297mm = 1122px), 2배 해상도
+  const A4_WIDTH_PX=1122;
+  const SCALE=2;
+  const contentW=target.offsetWidth;
+  const contentH=target.scrollHeight;
+
+  setTimeout(()=>{
+    html2canvas(target,{
+      scale:SCALE,
+      useCORS:true,
+      allowTaint:true,
+      backgroundColor:'#ffffff',
+      scrollX:0,
+      scrollY:0,
+      width:contentW,
+      height:contentH,
+      windowWidth:contentW,
+      windowHeight:contentH,
+      logging:false
+    }).then(srcCanvas=>{
+      // A4 가로 기준 최종 캔버스 생성 (가운데 정렬)
+      const finalW=A4_WIDTH_PX*SCALE;
+      const scaledContentW=srcCanvas.width;
+      const scaledContentH=srcCanvas.height;
+
+      // 콘텐츠 비율로 최종 높이 계산
+      const finalH=Math.round(scaledContentH*(finalW/scaledContentW));
+
+      const finalCanvas=document.createElement('canvas');
+      finalCanvas.width=finalW;
+      finalCanvas.height=finalH;
+
+      const ctx=finalCanvas.getContext('2d');
+      // 흰색 배경
+      ctx.fillStyle='#ffffff';
+      ctx.fillRect(0,0,finalW,finalH);
+
+      // 가운데 정렬: x 오프셋 계산
+      const drawW=Math.min(scaledContentW,finalW);
+      const xOffset=Math.round((finalW-drawW)/2);
+
+      // 콘텐츠를 가운데 배치
+      ctx.drawImage(srcCanvas,0,0,scaledContentW,scaledContentH,xOffset,0,drawW,finalH);
+
+      // PNG 다운로드
+      const link=document.createElement('a');
+      link.download=fileName;
+      link.href=finalCanvas.toDataURL('image/png',1.0);
+      link.click();
+
+      // 인쇄헤더 다시 숨김
+      printHeaders.forEach(el=>el.style.display='');
+      document.body.removeChild(loadingDiv);
+    }).catch(err=>{
+      console.error(err);
+      printHeaders.forEach(el=>el.style.display='');
+      document.body.removeChild(loadingDiv);
+      alert('이미지 저장 중 오류가 발생했습니다: '+err.message);
+    });
+  },100);
 }
 
 // ═══ EXCEL ═══
