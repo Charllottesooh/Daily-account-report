@@ -59,6 +59,11 @@ body{font-family:'Segoe UI',-apple-system,sans-serif;background:var(--bg);color:
 .fg{display:flex;flex-direction:column;gap:4px}
 .fl{font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.4px}
 .fi,.fs,.fta{border:1px solid var(--bd);border-radius:6px;padding:7px 10px;font-size:13px;color:var(--tx);background:var(--ca);width:100%;outline:none;font-family:inherit}
+/* 텍스트 입력칸 기본 한글 IME */
+input[type=text]:not([inputmode]),
+input:not([type]):not([inputmode]),
+textarea{ime-mode:active;-webkit-ime-mode:active}
+input[lang=ko]{ime-mode:active}
 .fi:focus,.fs:focus,.fta:focus{border-color:var(--pri);box-shadow:0 0 0 3px rgba(26,86,219,.1)}
 .fta{resize:vertical;min-height:60px}
 .tw{overflow-x:auto}
@@ -532,9 +537,9 @@ function showAccModal(id){
   openM('mmd',a?'계좌 수정':'계좌 추가',`
     <div class="g2 g22">
       <div class="fg"><label class="fl">코드 (자동생성)</label><input class="fi" id="ac-code" value="${a?a.code:nextCode(DB.accounts,'ACC')}" readonly style="background:#f8fafc;color:var(--mu)"></div>
-      <div class="fg"><label class="fl">은행명 *</label><input class="fi" id="ac-bank" value="${a?a.bank_name:''}" placeholder="예: 국민은행"></div>
-      <div class="fg"><label class="fl">계좌번호</label><input class="fi" id="ac-no" value="${a?a.account_no||'':''}" placeholder="000-00-000000"></div>
-      <div class="fg"><label class="fl">별명</label><input class="fi" id="ac-alias" value="${a?a.alias||'':''}" placeholder="예: 운영계좌"></div>
+      <div class="fg"><label class="fl">은행명 *</label><input class="fi" id="ac-bank" lang="ko" inputmode="text" value="${a?a.bank_name:''}" placeholder="예: 국민은행"></div>
+      <div class="fg"><label class="fl">계좌번호</label><input class="fi" id="ac-no" lang="ko" inputmode="text" value="${a?a.account_no||'':''}" placeholder="000-00-000000"></div>
+      <div class="fg"><label class="fl">별명</label><input class="fi" id="ac-alias" lang="ko" inputmode="text" value="${a?a.alias||'':''}" placeholder="예: 운영계좌"></div>
       <div class="fg" style="grid-column:1/-1"><label class="fl">기초잔액 (원)</label><input class="fi" id="ac-init" type="text" inputmode="numeric" value="${a?fmt(a.initial_balance||0):''}" placeholder="0" onchange="this.value=this.value.replace(/,/g,'')"></div>
     </div>`,
     `<button class="btn bs" onclick="closeM()">취소</button><button class="btn bp" onclick="saveAcc('${id||''}')">저장</button>`
@@ -609,16 +614,16 @@ function showLoanModal(id){
   openM('mlg',l?'대출내역 수정':'대출 추가',`
     <div class="g2 g23">
       <div class="fg"><label class="fl">코드 (자동생성)</label><input class="fi" id="ln-code" value="${l?l.code:nextCode(DB.loans,'LN')}" readonly style="background:#f8fafc;color:var(--mu)"></div>
-      <div class="fg"><label class="fl">은행명 *</label><input class="fi" id="ln-bank" value="${l?l.bank_name:''}" placeholder="예: 기업은행"></div>
-      <div class="fg"><label class="fl">계좌번호</label><input class="fi" id="ln-no" value="${l?l.account_no||'':''}" placeholder="000-00-000000"></div>
+      <div class="fg"><label class="fl">은행명 *</label><input class="fi" id="ln-bank" lang="ko" inputmode="text" value="${l?l.bank_name:''}" placeholder="예: 기업은행"></div>
+      <div class="fg"><label class="fl">계좌번호</label><input class="fi" id="ln-no" lang="ko" inputmode="text" value="${l?l.account_no||'':''}" placeholder="000-00-000000"></div>
       <div class="fg"><label class="fl">실행일자</label><input class="fi" id="ln-exec" type="date" value="${l?l.exec_date||'':''}"></div>
       <div class="fg"><label class="fl">만기일자</label><input class="fi" id="ln-mat" type="date" value="${l?l.maturity_date||'':''}"></div>
       <div class="fg"><label class="fl">대출원금 (원)</label><input class="fi" id="ln-prin" type="text" inputmode="numeric" value="${l?fmt(l.loan_principal||0):''}" placeholder="0" onchange="this.value=this.value.replace(/,/g,'')"></div>
       <div class="fg"><label class="fl">금리 (%)</label><input class="fi" id="ln-rate" type="text" inputmode="decimal" value="${l?l.rate||'':''}" placeholder="예: 3.5"></div>
       <div class="fg"><label class="fl">이자금액 (원/월)</label><input class="fi" id="ln-int" type="text" inputmode="numeric" value="${l?fmt(l.interest_amount||0):''}" placeholder="0" onchange="this.value=this.value.replace(/,/g,'')"></div>
       <div class="fg"><label class="fl">대출잔액 (원)</label><input class="fi" id="ln-bal" type="text" inputmode="numeric" value="${l?fmt(l.loan_balance||0):''}" placeholder="0" onchange="this.value=this.value.replace(/,/g,'')"></div>
-      <div class="fg"><label class="fl">담보내역</label><input class="fi" id="ln-col" value="${l?l.collateral||'':''}" placeholder="예: 부동산 담보"></div>
-      <div class="fg" style="grid-column:span 2"><label class="fl">비고</label><input class="fi" id="ln-memo" value="${l?l.memo||'':''}" placeholder="메모"></div>
+      <div class="fg"><label class="fl">담보내역</label><input class="fi" id="ln-col" lang="ko" inputmode="text" value="${l?l.collateral||'':''}" placeholder="예: 부동산 담보"></div>
+      <div class="fg" style="grid-column:span 2"><label class="fl">비고</label><input class="fi" id="ln-memo" lang="ko" inputmode="text" value="${l?l.memo||'':''}" placeholder="메모"></div>
     </div>`,
     `<button class="btn bs" onclick="closeM()">취소</button><button class="btn bp" onclick="saveLoan('${id||''}')">저장</button>`
   );
@@ -705,9 +710,9 @@ function showSaleModal(type, id){
   openM('mmd',isEdit?(isSale?'매출 수정':'입금 수정'):(isSale?'🔴 매출 입력':'🔵 입금 입력'),`
     <div class="g2 g22">
       <div class="fg"><label class="fl">날짜 *</label><input class="fi" id="sl-date" type="date" value="${s?s.date:SEL_DATE}"></div>
-      <div class="fg"><label class="fl">은행명</label><input class="fi" id="sl-bank" value="${s?s.bank_name||'':''}" placeholder="은행명"></div>
-      <div class="fg"><label class="fl">계좌번호</label><input class="fi" id="sl-no" value="${s?s.account_no||'':''}" placeholder="계좌번호"></div>
-      <div class="fg"><label class="fl">항목 *</label><input class="fi" id="sl-item" value="${s?s.item||'':''}" placeholder="예: 현금매출, 카드매출"></div>
+      <div class="fg"><label class="fl">은행명</label><input class="fi" id="sl-bank" lang="ko" inputmode="text" value="${s?s.bank_name||'':''}" placeholder="은행명"></div>
+      <div class="fg"><label class="fl">계좌번호</label><input class="fi" id="sl-no" lang="ko" inputmode="text" value="${s?s.account_no||'':''}" placeholder="계좌번호"></div>
+      <div class="fg"><label class="fl">항목 *</label><input class="fi" id="sl-item" lang="ko" inputmode="text" value="${s?s.item||'':''}" placeholder="예: 현금매출, 카드매출"></div>
       <div class="fg"><label class="fl">전일잔액 (원)</label><input class="fi" id="sl-prev" type="text" inputmode="numeric" value="${s?fmt(s.prev_balance||0):''}" placeholder="0" onchange="this.value=this.value.replace(/,/g,'');calcSaleFinal()"></div>
       <div class="fg"><label class="fl">${isSale?'매출':'입금'}금액 (원) *</label><input class="fi" id="sl-amt" type="text" inputmode="numeric" value="${s?fmt(s.amount||0):''}" placeholder="0" onchange="this.value=this.value.replace(/,/g,'');calcSaleFinal()"></div>
       <div class="fg" style="grid-column:1/-1"><label class="fl">최종잔액 (원)</label><input class="fi" id="sl-final" type="text" inputmode="numeric" value="${s?fmt(s.final_balance||0):''}" placeholder="자동계산" style="background:#f8fafc"></div>
@@ -772,9 +777,9 @@ function rDeposits(){
           <td><span class="code-badge">${a.code}</span></td>
           <td><b>${a.bank_name}</b></td><td class="tsm tmuted">${a.account_no||''}</td>
           <td class="tsm tmuted tc">-</td>
-          <td class="tr tmuted">${fmt(prev)}</td>
+          <td class="tr">${fmt(prev)}</td>
           <td class="tr">-</td><td class="tr">-</td>
-          <td class="tr tmuted">${fmt(prev)}</td>
+          <td class="tr amt-bal">${fmt(prev)}</td>
           <td class="tsm tmuted">-</td><td class="tsm tmuted">-</td>
           <td class="tc no-print"><button class="btn bp" style="font-size:10px;padding:3px 7px" onclick="showDepModal('${a.id}')">입력</button></td>
         </tr>`;
@@ -830,13 +835,13 @@ function showDepModal(accId, depId){
           ${[...DB.accounts].sort((a,b)=>a.code.localeCompare(b.code)).map(a=>`<option value="${a.id}" ${(dep?dep.account_id:accId)===a.id?'selected':''}>[${a.code}] ${a.bank_name} ${a.alias?'('+a.alias+')':''}</option>`).join('')}
         </select>
       </div>
-      <div class="fg"><label class="fl">비고 유형</label><input class="fi" id="dp-mtype" value="${dep?dep.memo_type||'':''}" placeholder="예: 이체, 현금, 카드"></div>
+      <div class="fg"><label class="fl">비고 유형</label><input class="fi" id="dp-mtype" lang="ko" inputmode="text" value="${dep?dep.memo_type||'':''}" placeholder="예: 이체, 현금, 카드"></div>
       <div class="fg"><label class="fl">전잔액 (자동세팅)</label><input class="fi" id="dp-prev" type="text" inputmode="numeric" value="${fmt(prevBal)}" onchange="this.value=this.value.replace(/,/g,'');calcDepFinal()"></div>
       <div class="fg"><label class="fl">입금 (원)</label><input class="fi" id="dp-in" type="text" inputmode="numeric" value="${dep?fmt(dep.in_amount||0):''}" placeholder="0" onchange="this.value=this.value.replace(/,/g,'');calcDepFinal()"></div>
       <div class="fg"><label class="fl">출금 (원)</label><input class="fi" id="dp-out" type="text" inputmode="numeric" value="${dep?fmt(dep.out_amount||0):''}" placeholder="0" onchange="this.value=this.value.replace(/,/g,'');calcDepFinal()"></div>
       <div class="fg" style="grid-column:1/-1"><label class="fl">최종잔액 (자동계산)</label><input class="fi" id="dp-final" type="text" inputmode="numeric" value="${dep?fmt(dep.final_balance||0):fmt(prevBal)}" style="background:#f0f7ff;font-weight:700" onchange="this.value=this.value.replace(/,/g,'')"></div>
-      <div class="fg"><label class="fl">상세내역</label><input class="fi" id="dp-detail" value="${dep?dep.detail||'':''}" placeholder="거래 상세내용"></div>
-      <div class="fg"><label class="fl">비고</label><input class="fi" id="dp-memo" value="${dep?dep.memo||'':''}" placeholder="메모"></div>
+      <div class="fg"><label class="fl">상세내역</label><input class="fi" id="dp-detail" lang="ko" inputmode="text" value="${dep?dep.detail||'':''}" placeholder="거래 상세내용"></div>
+      <div class="fg"><label class="fl">비고</label><input class="fi" id="dp-memo" lang="ko" inputmode="text" value="${dep?dep.memo||'':''}" placeholder="메모"></div>
     </div>`,
     `<button class="btn bs" onclick="closeM()">취소</button><button class="btn bp" onclick="saveDep('${dep?dep.id:''}')">저장</button>`
   );
@@ -1021,11 +1026,11 @@ function rSettings(){
   const s=DB.settings;
   return`<div style="max-width:560px">
   <div class="card" style="margin-bottom:13px"><div class="ch"><span class="ct">회사 정보</span></div><div class="cb">
-    <div class="fg"><label class="fl">회사명</label><input class="fi" id="s-co" value="${s.company||''}" placeholder="회사명 입력"></div>
+    <div class="fg"><label class="fl">회사명</label><input class="fi" id="s-co" lang="ko" inputmode="text" value="${s.company||''}" placeholder="회사명 입력"></div>
     <button class="btn bp mt12" onclick="svSet()">저장</button>
   </div></div>
   <div class="card" style="margin-bottom:13px"><div class="ch"><span class="ct">Google Sheets 자동동기화</span></div><div class="cb">
-    <div class="fg" style="margin-bottom:12px"><label class="fl">Apps Script URL</label><input class="fi" id="s-gs" value="${s.gs_script||''}" placeholder="https://script.google.com/macros/s/.../exec"></div>
+    <div class="fg" style="margin-bottom:12px"><label class="fl">Apps Script URL</label><input class="fi" id="s-gs" inputmode="url" value="${s.gs_script||''}" placeholder="https://script.google.com/macros/s/.../exec"></div>
     <div class="g2 g22" style="margin-bottom:12px">
       <div class="fg"><label class="fl">동기화 주기 (분)</label><input class="fi" id="s-gsi" type="number" value="${s.gs_interval||30}" min="5"></div>
       <div class="fg"><label class="fl">자동동기화</label><div class="flex aic gap6" style="margin-top:8px"><input type="checkbox" id="s-gsa" ${s.gs_auto?'checked':''} style="width:16px;height:16px"><label for="s-gsa" style="font-size:12px">활성화</label></div></div>
@@ -1196,6 +1201,14 @@ function resetDB(){
 // ═══ MODAL ═══
 function openM(sz,title,body,footer){
   document.getElementById('mc').innerHTML=`<div class="moverlay" onclick="if(event.target===this)closeM()"><div class="modal ${sz}"><div class="mh"><span class="mt2">${title}</span><button class="xbtn" onclick="closeM()">×</button></div><div class="mb2">${body}</div>${footer?`<div class="mf">${footer}</div>`:''}</div></div>`;
+  // 모달 열릴 때 첫 텍스트 입력 필드에 자동 포커스 (한글 IME 활성화)
+  setTimeout(()=>{
+    const modal=document.querySelector('.modal');
+    if(modal){
+      const first=modal.querySelector('input[type="text"]:not([inputmode="numeric"]):not([inputmode="decimal"]):not([inputmode="url"]),input:not([type]):not([readonly])');
+      if(first){first.focus();first.click();}
+    }
+  },50);
 }
 function closeM(){document.getElementById('mc').innerHTML='';}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM();});
