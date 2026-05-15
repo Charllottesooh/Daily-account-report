@@ -1480,6 +1480,15 @@ function saveAsImage(){
           ct.style.maxHeight='none';
           ct.style.maxWidth='none';
         }
+        // .no-print 요소들 모두 숨김 (수정/삭제/입력 버튼 + 관리 컬럼)
+        clonedDoc.querySelectorAll('.no-print').forEach(el=>{
+          el.style.display='none';
+          el.style.visibility='hidden';
+          el.style.width='0';
+          el.style.padding='0';
+          el.style.margin='0';
+          el.style.border='0';
+        });
       }
     }).then(canvas=>{
       // PNG 다운로드 (원본 크기 그대로, A4 강제 맞춤 없음)
