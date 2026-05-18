@@ -1244,5 +1244,209 @@ ldDB();
 document.getElementById('today-display').textContent='📅 '+today();
 go('dash');
 </script>
+  <!-- ===== Workspace Sidebar (PC only, hidden on mobile) ===== -->
+<script>window.WS_CURRENT_APP="daily-report";</script>
+<style id="ws-launcher-style">
+@media (min-width: 1024px) {
+  body { padding-left: 220px !important; }
+  #ws-launcher {
+    position: fixed !important;
+    left: 0 !important; top: 0 !important; bottom: 0 !important;
+    width: 220px !important;
+    background: linear-gradient(180deg, #0a0d12 0%, #0f1320 100%) !important;
+    border-right: 1px solid rgba(255,255,255,0.08) !important;
+    z-index: 99999 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 22px 14px !important;
+    font-family: -apple-system, 'Segoe UI', 'Pretendard', sans-serif !important;
+    color: #f0f3f9 !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+  }
+  #ws-launcher,
+  #ws-launcher *,
+  #ws-launcher *::before,
+  #ws-launcher *::after { box-sizing: border-box !important; }
+
+  #ws-launcher .ws-brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 0 8px 18px !important;
+    margin-bottom: 14px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+    background: transparent !important;
+  }
+  #ws-launcher .ws-logo {
+    width: 32px !important; height: 32px !important;
+    border-radius: 9px !important;
+    background: linear-gradient(135deg, #7c8cff 0%, #b67cff 50%, #ff7cae 100%) !important;
+    display: grid !important; place-items: center !important;
+    box-shadow: 0 6px 20px rgba(124,140,255,0.25) !important;
+    flex-shrink: 0 !important;
+  }
+  #ws-launcher .ws-logo svg { width: 16px !important; height: 16px !important; color: #fff !important; }
+  #ws-launcher .ws-title {
+    font-size: 14px !important; font-weight: 700 !important;
+    letter-spacing: -0.2px !important;
+    color: #f0f3f9 !important;
+    line-height: 1.2 !important;
+    background: transparent !important;
+  }
+  #ws-launcher .ws-sub {
+    font-size: 9px !important; color: #555c6e !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.5px !important;
+    margin-top: 2px !important;
+    font-weight: 600 !important;
+    background: transparent !important;
+  }
+  #ws-launcher .ws-label {
+    font-size: 9px !important; color: #555c6e !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    font-weight: 600 !important;
+    padding: 0 12px !important;
+    margin-bottom: 8px !important;
+    background: transparent !important;
+  }
+  #ws-launcher .ws-nav {
+    display: flex !important; flex-direction: column !important;
+    gap: 3px !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  #ws-launcher a.ws-item,
+  #ws-launcher a.ws-item:link,
+  #ws-launcher a.ws-item:visited {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 9px 11px !important;
+    border-radius: 8px !important;
+    color: #8a93a6 !important;
+    text-decoration: none !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    border: 1px solid transparent !important;
+    transition: all 0.15s ease !important;
+    position: relative !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    width: auto !important;
+  }
+  #ws-launcher a.ws-item:hover {
+    background: rgba(255,255,255,0.04) !important;
+    color: #f0f3f9 !important;
+  }
+  #ws-launcher a.ws-item.ws-active,
+  #ws-launcher a.ws-item.ws-active:link,
+  #ws-launcher a.ws-item.ws-active:visited,
+  #ws-launcher a.ws-item.ws-active:hover {
+    background: rgba(124,140,255,0.15) !important;
+    color: #ffffff !important;
+    border-color: rgba(124,140,255,0.3) !important;
+  }
+  #ws-launcher a.ws-item.ws-active::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important; top: 8px !important; bottom: 8px !important;
+    width: 2px !important;
+    background: linear-gradient(180deg, #7c8cff, #ff7cae) !important;
+    border-radius: 2px !important;
+    display: block !important;
+  }
+  #ws-launcher a.ws-item > span {
+    color: inherit !important;
+    background: transparent !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    line-height: 1.4 !important;
+  }
+  #ws-launcher a.ws-item.ws-active > span:not(.ws-icon) {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+  }
+  #ws-launcher .ws-icon {
+    width: 26px !important; height: 26px !important;
+    border-radius: 7px !important;
+    display: grid !important; place-items: center !important;
+    font-size: 14px !important;
+    background: rgba(255,255,255,0.05) !important;
+    flex-shrink: 0 !important;
+    color: inherit !important;
+  }
+  #ws-launcher a.ws-active .ws-icon {
+    background: rgba(124,140,255,0.2) !important;
+  }
+  #ws-launcher .ws-foot {
+    margin-top: auto !important;
+    padding-top: 14px !important;
+    border-top: 1px solid rgba(255,255,255,0.06) !important;
+    font-size: 10px !important;
+    color: #555c6e !important;
+    text-align: center !important;
+    background: transparent !important;
+  }
+  #ws-launcher .ws-foot .ws-dot {
+    display: inline-block !important;
+    width: 6px !important; height: 6px !important;
+    border-radius: 50% !important;
+    background: #00d97e !important;
+    margin-right: 5px !important;
+    box-shadow: 0 0 6px #00d97e !important;
+  }
+}
+@media (max-width: 1023px) {
+  #ws-launcher { display: none !important; }
+}
+@media print {
+  #ws-launcher { display: none !important; }
+  body { padding-left: 0 !important; }
+}
+</style>
+
+<aside id="ws-launcher">
+  <div class="ws-brand">
+    <div class="ws-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    </div>
+    <div>
+      <div class="ws-title">Workspace</div>
+      <div class="ws-sub">Console</div>
+    </div>
+  </div>
+  <div class="ws-label">Applications</div>
+  <nav class="ws-nav">
+    <a class="ws-item" data-app="daily-report" href="https://charllottesooh.github.io/Daily-account-report/">
+      <span class="ws-icon">📊</span><span>일일보고</span>
+    </a>
+    <a class="ws-item" data-app="purchase" href="https://charllottesooh.github.io/my-erp/">
+      <span class="ws-icon">💳</span><span>일일결제</span>
+    </a>
+    <a class="ws-item" data-app="franchise" href="https://charllottesooh.github.io/franchise-manager/">
+      <span class="ws-icon">🏪</span><span>가맹점 변동</span>
+    </a>
+    <a class="ws-item" data-app="production" href="https://charllottesooh.github.io/production_erp/">
+      <span class="ws-icon">🏭</span><span>제품생산 ERP</span>
+    </a>
+  </nav>
+  <div class="ws-foot"><span class="ws-dot"></span>Workspace v2</div>
+</aside>
+
+<script>
+(function(){
+  var current = window.WS_CURRENT_APP || '';
+  if (!current) return;
+  var items = document.querySelectorAll('#ws-launcher a.ws-item');
+  items.forEach(function(el){
+    if (el.dataset.app === current) el.classList.add('ws-active');
+  });
+})();
+</script>
+<!-- ===== /Workspace Sidebar ===== -->
 </body>
 </html>
