@@ -1,26 +1,10 @@
 
 <!DOCTYPE html>
-<!-- saved from url=(0054)https://charllottesooh.github.io/Daily-account-report/ -->
-<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>일일시재보고</title>
-
-<!-- PWA: 앱으로 설치 -->
-<meta name="theme-color" content="#0a0d12">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="일일보고">
-<meta name="application-name" content="일일보고">
-<meta name="format-detection" content="telephone=no">
-
-<!-- 아이콘: 블루 그라데이션 (막대그래프 모티프) -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234a90e2'/%3E%3Cstop offset='50%25' stop-color='%235b6def'/%3E%3Cstop offset='100%25' stop-color='%237c8cff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='%230a0d12'/%3E%3Crect x='42' y='50' width='22' height='80' rx='3' fill='url(%23g)' opacity='0.4'/%3E%3Crect x='72' y='35' width='22' height='95' rx='3' fill='url(%23g)' opacity='0.65'/%3E%3Crect x='102' y='60' width='22' height='70' rx='3' fill='url(%23g)' opacity='0.85'/%3E%3Crect x='132' y='20' width='22' height='110' rx='3' fill='url(%23g)'/%3E%3Crect x='38' y='142' width='120' height='2' rx='1' fill='rgba(255,255,255,0.2)'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234a90e2'/%3E%3Cstop offset='50%25' stop-color='%235b6def'/%3E%3Cstop offset='100%25' stop-color='%237c8cff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='%230a0d12'/%3E%3Crect x='42' y='50' width='22' height='80' rx='3' fill='url(%23g)' opacity='0.4'/%3E%3Crect x='72' y='35' width='22' height='95' rx='3' fill='url(%23g)' opacity='0.65'/%3E%3Crect x='102' y='60' width='22' height='70' rx='3' fill='url(%23g)' opacity='0.85'/%3E%3Crect x='132' y='20' width='22' height='110' rx='3' fill='url(%23g)'/%3E%3Crect x='38' y='142' width='120' height='2' rx='1' fill='rgba(255,255,255,0.2)'/%3E%3C/svg%3E">
-
-<!-- PWA Manifest -->
-<link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22%EC%9D%BC%EC%9D%BC%EC%8B%9C%EC%9E%AC%EB%B3%B4%EA%B3%A0%22%2C%22short_name%22%3A%22%EC%9D%BC%EC%9D%BC%EB%B3%B4%EA%B3%A0%22%2C%22start_url%22%3A%22.%22%2C%22scope%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22any%22%2C%22background_color%22%3A%22%23ffffff%22%2C%22theme_color%22%3A%22%230a0d12%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%2520180%2520180%2527%253E%253Crect%2520width%253D%2527180%2527%2520height%253D%2527180%2527%2520rx%253D%252740%2527%2520fill%253D%2527%25237c8cff%2527%252F%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22180x180%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -259,19 +243,19 @@ tbody tr:last-child td{border-bottom:none}
   </div>
   <nav class="snav">
     <div class="nsec">메인</div>
-    <div class="ni active" data-p="dash" onclick="go(&#39;dash&#39;)"><span class="nico">📊</span><span>대시보드</span></div>
+    <div class="ni active" data-p="dash" onclick="go('dash')"><span class="nico">📊</span><span>대시보드</span></div>
     <div class="nsec">기초설정</div>
-    <div class="ni" data-p="accounts" onclick="go(&#39;accounts&#39;)"><span class="nico">🏦</span><span>계좌내역</span></div>
-    <div class="ni" data-p="loans" onclick="go(&#39;loans&#39;)"><span class="nico">💳</span><span>대출내역</span></div>
+    <div class="ni" data-p="accounts" onclick="go('accounts')"><span class="nico">🏦</span><span>계좌내역</span></div>
+    <div class="ni" data-p="loans" onclick="go('loans')"><span class="nico">💳</span><span>대출내역</span></div>
     <div class="nsec">일일입력</div>
-    <div class="ni" data-p="sales" onclick="go(&#39;sales&#39;)"><span class="nico">💰</span><span>매출/입금</span></div>
-    <div class="ni" data-p="deposits" onclick="go(&#39;deposits&#39;)"><span class="nico">🏧</span><span>예금내역</span></div>
+    <div class="ni" data-p="sales" onclick="go('sales')"><span class="nico">💰</span><span>매출/입금</span></div>
+    <div class="ni" data-p="deposits" onclick="go('deposits')"><span class="nico">🏧</span><span>예금내역</span></div>
     <div class="nsec">조회</div>
-    <div class="ni" data-p="report" onclick="go(&#39;report&#39;)"><span class="nico">📋</span><span>월별 리포트</span></div>
+    <div class="ni" data-p="report" onclick="go('report')"><span class="nico">📋</span><span>월별 리포트</span></div>
     <div class="nsec">데이터</div>
     <div class="ni" onclick="doExport()"><span class="nico">📤</span><span>엑셀저장</span></div>
     <div class="ni" onclick="trigImp()"><span class="nico">📥</span><span>불러오기</span></div>
-    <div class="ni" data-p="settings" onclick="go(&#39;settings&#39;)"><span class="nico">⚙</span><span>설정</span></div>
+    <div class="ni" data-p="settings" onclick="go('settings')"><span class="nico">⚙</span><span>설정</span></div>
   </nav>
   <div class="sbot">
     <div style="font-size:11px;color:var(--lt)">일일시재보고 v1.0</div>
@@ -282,310 +266,14 @@ tbody tr:last-child td{border-bottom:none}
   <div class="topbar">
     <div class="tbtl" id="ptitle">대시보드</div>
     <div class="tba">
-      <span id="today-display" style="font-size:12px;color:var(--mu)">📅 2026-05-14</span>
+      <span id="today-display" style="font-size:12px;color:var(--mu)"></span>
       <button class="btn bs no-print" style="font-size:11px;padding:5px 9px" onclick="window.print()">🖨 인쇄</button>
       <button class="btn bs no-print" style="font-size:11px;padding:5px 9px;color:var(--ok)" onclick="saveAsImage()">🖼 이미지저장</button>
       <button class="btn bs no-print" style="font-size:11px;padding:5px 9px" onclick="doExport()">📤 엑셀</button>
       <input type="file" id="impf" accept=".xlsx,.xls" style="display:none" onchange="handleImp(event)">
     </div>
   </div>
-  <div class="content" id="pcont"><div class="print-header">
-    <h1>일일시재보고</h1>
-    <div class="print-subtitle">대시보드</div>
-    <div class="print-date">조회일자: <b>2026-05-14</b> &nbsp;|&nbsp; 출력일시: 2026. 5. 14. 오전 10:36:41 &nbsp;|&nbsp; (주)일동인터내쇼날</div>
-  </div><div class="datebar no-print">
-    <label>조회날짜</label>
-    <input type="date" id="sel-date" value="2026-05-14" onchange="SEL_DATE=this.value;SEL_YM=this.value.slice(0,7);rc()">
-    <button class="btn bs" style="font-size:11px;padding:5px 9px" onclick="SEL_DATE=today();SEL_YM=todayYM();document.getElementById(&#39;sel-date&#39;).value=SEL_DATE;rc()">오늘</button>
-    <span style="font-size:12px;color:var(--mu);margin-left:8px">선택일: <b>2026-05-14</b></span>
-  </div>
-  <div class="sgrid">
-    <div class="sc"><div class="sl">총 예금잔액</div><div class="sv bl">85,580,272<span style="font-size:11px;color:var(--mu)">원</span></div><div style="font-size:10px;color:var(--mu);margin-top:3px">16개 계좌</div></div>
-    <div class="sc"><div class="sl">총 대출잔액</div><div class="sv rd">2,250,000,000<span style="font-size:11px;color:var(--mu)">원</span></div><div style="font-size:10px;color:var(--mu);margin-top:3px">3건</div></div>
-    <div class="sc"><div class="sl">당일 매출</div><div class="sv gn">0<span style="font-size:11px;color:var(--mu)">원</span></div><div style="font-size:10px;color:var(--mu);margin-top:3px">입금 0원</div></div>
-    <div class="sc"><div class="sl">월 누계 매출</div><div class="sv og">187,451,460<span style="font-size:11px;color:var(--mu)">원</span></div><div style="font-size:10px;color:var(--mu);margin-top:3px">월 입금 171,235,240원</div></div>
-  </div>
-
-  <!-- 계좌별 잔액 현황 -->
-  <div class="card" style="margin-bottom:14px"><div class="ch"><span class="ct">계좌별 잔액 현황 (2026-05-14)</span><button class="btn bp no-print" style="font-size:11px" onclick="go(&#39;deposits&#39;)">예금 입력</button></div>
-    <div class="tw"><table>
-      <thead><tr><th>코드</th><th>은행명</th><th>계좌번호</th><th>별명</th><th class="tr">전일잔액</th><th class="tr">금일잔액</th><th class="tr">최종잔액</th></tr></thead>
-      <tbody><tr>
-          <td><span class="code-badge">ACC001</span></td>
-          <td><b>기업</b></td><td class="tsm tmuted">148-023233-04-166</td>
-          <td>주거래</td>
-          <td class="tr">4,623,630</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">4,623,630</td>
-        </tr><tr>
-          <td><span class="code-badge">ACC002</span></td>
-          <td><b>기업</b></td><td class="tsm tmuted">148-023233-04-106</td>
-          <td>예수(기타)</td>
-          <td class="tr">63,098,471</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">63,098,471</td>
-        </tr><tr>
-          <td><span class="code-badge">ACC003</span></td>
-          <td><b>기업</b></td><td class="tsm tmuted">148-023233-04-021</td>
-          <td>예금</td>
-          <td class="tr">11,514</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">11,514</td>
-        </tr><tr>
-          <td><span class="code-badge">ACC004</span></td>
-          <td><b>기업</b></td><td class="tsm tmuted">058-0457347-01-011</td>
-          <td>대여금이자소득</td>
-          <td class="tr">0</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">0</td>
-        </tr><tr>
-          <td><span class="code-badge">ACC005</span></td>
-          <td><b>기업</b></td><td class="tsm tmuted">148-023233-04-045</td>
-          <td>가맹비</td>
-          <td class="tr">168</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">168</td>
-        </tr><tr>
-          <td><span class="code-badge">ACC006</span></td>
-          <td><b>기업</b></td><td class="tsm tmuted">148-023233-01-063</td>
-          <td>보증금</td>
-          <td class="tr">15</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">15</td>
-        </tr><tr>
-          <td><span class="code-badge">ACC007</span></td>
-          <td><b>기업</b></td><td class="tsm tmuted">148-023233-04-077</td>
-          <td>예수(퇴직연금)</td>
-          <td class="tr">64,346</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">64,346</td>
-        </tr><tr>
-          <td><span class="code-badge">ACC008</span></td>
-          <td><b>기업</b></td><td class="tsm tmuted">148-023233-04-110</td>
-          <td>예수(임대료)</td>
-          <td class="tr">3,165</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">3,165</td>
-        </tr><tr>
-          <td><span class="code-badge">ACC009</span></td>
-          <td><b>기업</b></td><td class="tsm tmuted">148-023233-04-134</td>
-          <td>예수(닭미수)</td>
-          <td class="tr">0</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">0</td>
-        </tr><tr>
-          <td><span class="code-badge">ACC010</span></td>
-          <td><b>기업</b></td><td class="tsm tmuted">148-023233-04-141</td>
-          <td>예수(이자)</td>
-          <td class="tr">34</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">34</td>
-        </tr><tr>
-          <td><span class="code-badge">ACC011</span></td>
-          <td><b>기업</b></td><td class="tsm tmuted">148-023233-04-159</td>
-          <td>예수(세금)</td>
-          <td class="tr">41,303</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">41,303</td>
-        </tr><tr>
-          <td><span class="code-badge">ACC012</span></td>
-          <td><b>기업</b></td><td class="tsm tmuted">148-023233-04-127</td>
-          <td>예수(급여)</td>
-          <td class="tr">9,900,522</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">9,900,522</td>
-        </tr><tr>
-          <td><span class="code-badge">ACC013</span></td>
-          <td><b>기업</b></td><td class="tsm tmuted">148-023233-04-095</td>
-          <td>예수(물류)</td>
-          <td class="tr">10,716</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">10,716</td>
-        </tr><tr>
-          <td><span class="code-badge">ACC014</span></td>
-          <td><b>기업</b></td><td class="tsm tmuted">148-023233-04-181</td>
-          <td>예수(자동차)</td>
-          <td class="tr">6,000,000</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">6,000,000</td>
-        </tr><tr>
-          <td><span class="code-badge">ACC015</span></td>
-          <td><b>기업</b></td><td class="tsm tmuted">148-023233-04-173</td>
-          <td>김포지출</td>
-          <td class="tr">72,248</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">72,248</td>
-        </tr><tr>
-          <td><span class="code-badge">ACC016</span></td>
-          <td><b>하나</b></td><td class="tsm tmuted">581-910058-20904</td>
-          <td>예금</td>
-          <td class="tr">1,754,140</td>
-          <td class="tr">-</td>
-          <td class="tr amt-bal">1,754,140</td>
-        </tr>
-      </tbody>
-      <tfoot style="background:#f0f7ff"><tr><td colspan="4" style="padding:7px 10px;font-weight:700">합계</td>
-        <td class="tr" style="padding:7px 10px;font-weight:700">85,580,272</td>
-        <td></td>
-        <td class="tr" style="padding:7px 10px;font-weight:700;color:var(--ok)">85,580,272</td>
-      </tr></tfoot>
-    </table></div>
-  </div>
-
-  <!-- 월별 일별 매출/입금 누계 -->
-  <div class="card" style="margin-bottom:14px"><div class="ch">
-      <span class="ct">일별 매출/입금 현황 (2026-05)</span>
-      <button class="btn bp no-print" style="font-size:11px" onclick="go(&#39;report&#39;)">월별 리포트</button>
-    </div>
-    <div class="tw"><table>
-      <thead><tr>
-        <th>날짜</th>
-        <th class="tr">매출</th>
-        <th class="tr">누계 매출</th>
-        <th class="tr">입금</th>
-        <th class="tr">누계 입금</th>
-        <th class="tr">차액 (매출-입금)</th>
-      </tr></thead>
-      <tbody><tr style="">
-          <td><b style="">2026-05-01</b></td>
-          <td class="tr amt-out">23,172,690</td>
-          <td class="tr" style="color:var(--mu)">23,172,690</td>
-          <td class="tr amt-in">17,250,000</td>
-          <td class="tr" style="color:var(--mu)">17,250,000</td>
-          <td class="tr" style="font-weight:700;color:var(--err)">+5,922,690</td>
-        </tr><tr style="">
-          <td><b style="">2026-05-02</b></td>
-          <td class="tr amt-out">18,356,480</td>
-          <td class="tr" style="color:var(--mu)">41,529,170</td>
-          <td class="tr amt-in">13,566,140</td>
-          <td class="tr" style="color:var(--mu)">30,816,140</td>
-          <td class="tr" style="font-weight:700;color:var(--err)">+4,790,340</td>
-        </tr><tr style="">
-          <td><b style="">2026-05-03</b></td>
-          <td class="tr amt-out">-</td>
-          <td class="tr" style="color:var(--mu)">41,529,170</td>
-          <td class="tr amt-in">8,845,000</td>
-          <td class="tr" style="color:var(--mu)">39,661,140</td>
-          <td class="tr" style="font-weight:700;color:var(--pri)">-8,845,000</td>
-        </tr><tr style="">
-          <td><b style="">2026-05-04</b></td>
-          <td class="tr amt-out">18,344,760</td>
-          <td class="tr" style="color:var(--mu)">59,873,930</td>
-          <td class="tr amt-in">16,452,500</td>
-          <td class="tr" style="color:var(--mu)">56,113,640</td>
-          <td class="tr" style="font-weight:700;color:var(--err)">+1,892,260</td>
-        </tr><tr style="">
-          <td><b style="">2026-05-05</b></td>
-          <td class="tr amt-out">10,738,610</td>
-          <td class="tr" style="color:var(--mu)">70,612,540</td>
-          <td class="tr amt-in">13,002,000</td>
-          <td class="tr" style="color:var(--mu)">69,115,640</td>
-          <td class="tr" style="font-weight:700;color:var(--pri)">-2,263,390</td>
-        </tr><tr style="">
-          <td><b style="">2026-05-06</b></td>
-          <td class="tr amt-out">20,143,140</td>
-          <td class="tr" style="color:var(--mu)">90,755,680</td>
-          <td class="tr amt-in">25,703,660</td>
-          <td class="tr" style="color:var(--mu)">94,819,300</td>
-          <td class="tr" style="font-weight:700;color:var(--pri)">-5,560,520</td>
-        </tr><tr style="">
-          <td><b style="">2026-05-07</b></td>
-          <td class="tr amt-out">12,283,450</td>
-          <td class="tr" style="color:var(--mu)">103,039,130</td>
-          <td class="tr amt-in">12,815,140</td>
-          <td class="tr" style="color:var(--mu)">107,634,440</td>
-          <td class="tr" style="font-weight:700;color:var(--pri)">-531,690</td>
-        </tr><tr style="">
-          <td><b style="">2026-05-08</b></td>
-          <td class="tr amt-out">23,041,340</td>
-          <td class="tr" style="color:var(--mu)">126,080,470</td>
-          <td class="tr amt-in">15,733,300</td>
-          <td class="tr" style="color:var(--mu)">123,367,740</td>
-          <td class="tr" style="font-weight:700;color:var(--err)">+7,308,040</td>
-        </tr><tr style="">
-          <td><b style="">2026-05-09</b></td>
-          <td class="tr amt-out">15,942,170</td>
-          <td class="tr" style="color:var(--mu)">142,022,640</td>
-          <td class="tr amt-in">5,340,000</td>
-          <td class="tr" style="color:var(--mu)">128,707,740</td>
-          <td class="tr" style="font-weight:700;color:var(--err)">+10,602,170</td>
-        </tr><tr style="">
-          <td><b style="">2026-05-10</b></td>
-          <td class="tr amt-out">-</td>
-          <td class="tr" style="color:var(--mu)">142,022,640</td>
-          <td class="tr amt-in">6,214,100</td>
-          <td class="tr" style="color:var(--mu)">134,921,840</td>
-          <td class="tr" style="font-weight:700;color:var(--pri)">-6,214,100</td>
-        </tr><tr style="">
-          <td><b style="">2026-05-11</b></td>
-          <td class="tr amt-out">18,393,590</td>
-          <td class="tr" style="color:var(--mu)">160,416,230</td>
-          <td class="tr amt-in">13,925,000</td>
-          <td class="tr" style="color:var(--mu)">148,846,840</td>
-          <td class="tr" style="font-weight:700;color:var(--err)">+4,468,590</td>
-        </tr><tr style="">
-          <td><b style="">2026-05-12</b></td>
-          <td class="tr amt-out">9,602,900</td>
-          <td class="tr" style="color:var(--mu)">170,019,130</td>
-          <td class="tr amt-in">13,401,700</td>
-          <td class="tr" style="color:var(--mu)">162,248,540</td>
-          <td class="tr" style="font-weight:700;color:var(--pri)">-3,798,800</td>
-        </tr><tr style="">
-          <td><b style="">2026-05-13</b></td>
-          <td class="tr amt-out">17,432,330</td>
-          <td class="tr" style="color:var(--mu)">187,451,460</td>
-          <td class="tr amt-in">8,986,700</td>
-          <td class="tr" style="color:var(--mu)">171,235,240</td>
-          <td class="tr" style="font-weight:700;color:var(--err)">+8,445,630</td>
-        </tr></tbody>
-      <tfoot style="background:#f0f7ff"><tr>
-        <td style="padding:7px 10px;font-weight:700">합계</td>
-        <td class="tr" style="padding:7px 10px;font-weight:700;color:var(--err)">187,451,460</td>
-        <td class="tr" style="padding:7px 10px;color:var(--mu)">187,451,460</td>
-        <td class="tr" style="padding:7px 10px;font-weight:700;color:var(--pri)">171,235,240</td>
-        <td class="tr" style="padding:7px 10px;color:var(--mu)">171,235,240</td>
-        <td class="tr" style="padding:7px 10px;font-weight:700;color:var(--err)">+16,216,220</td>
-      </tr></tfoot>
-    </table></div></div>
-
-  <!-- 당일 매출/입금 -->
-  <div class="g2 g22">
-    <div class="card"><div class="ch"><span class="ct">당일 매출/입금 내역</span><button class="btn bp no-print" style="font-size:11px" onclick="go(&#39;sales&#39;)">입력</button></div>
-      <div class="tw"><table>
-        <thead><tr><th>구분</th><th>은행/계좌</th><th>항목</th><th class="tr">금액</th></tr></thead>
-        <tbody><tr><td colspan="4" class="tc tmuted" style="padding:16px">당일 내역 없음</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <div class="card"><div class="ch"><span class="ct">대출 현황</span><button class="btn bp no-print" style="font-size:11px" onclick="go(&#39;loans&#39;)">관리</button></div>
-      <div class="tw"><table>
-        <thead><tr><th>코드</th><th>은행명</th><th>금리</th><th class="tr">대출잔액</th><th>만기일</th></tr></thead>
-        <tbody><tr>
-            <td><span class="code-badge">LN001</span></td>
-            <td><b>기업</b></td>
-            <td class="tsm">4.698%</td>
-            <td class="tr amt-out">1,250,000,000</td>
-            <td class="tsm risk-ok">2029-03-30 (D-1051)
-            </td>
-          </tr><tr>
-            <td><span class="code-badge">LN002</span></td>
-            <td><b>하나</b></td>
-            <td class="tsm">4.535%</td>
-            <td class="tr amt-out">500,000,000</td>
-            <td class="tsm risk-high">2026-06-11 (D-28)
-            </td>
-          </tr><tr>
-            <td><span class="code-badge">LN003</span></td>
-            <td><b>하나</b></td>
-            <td class="tsm">5.251%</td>
-            <td class="tr amt-out">500,000,000</td>
-            <td class="tsm risk-ok">2026-11-28 (D-198)
-            </td>
-          </tr>
-        </tbody>
-      </table></div>
-    </div>
-  </div><div class="print-footer">일일시재보고 © 2026 &nbsp;|&nbsp; 대시보드</div></div>
+  <div class="content" id="pcont"></div>
 </div>
 </div>
 <div id="mc"></div>
@@ -1067,10 +755,20 @@ function delSale(id){
 // ═══ DEPOSITS (예금내역) ═══
 function rDeposits(){
   const accList=[...DB.accounts].sort((a,b)=>a.code.localeCompare(b.code));
+  // 월 누계 매출/입금
+  const mSale=DB.sales.filter(s=>s.date.slice(0,7)===SEL_YM&&s.type==='sale').reduce((s,x)=>s+(x.amount||0),0);
+  const mDep=DB.sales.filter(s=>s.date.slice(0,7)===SEL_YM&&s.type==='deposit').reduce((s,x)=>s+(x.amount||0),0);
+  const todaySale=DB.sales.filter(s=>s.date===SEL_DATE&&s.type==='sale').reduce((s,x)=>s+(x.amount||0),0);
+  const todayDep=DB.sales.filter(s=>s.date===SEL_DATE&&s.type==='deposit').reduce((s,x)=>s+(x.amount||0),0);
   return`${rDateBar()}
+  <!-- 월 누계 카드 -->
+  <div class="g2 g23" style="margin-bottom:14px">
+    <div class="sc"><div class="sl">월 누계 매출 (${SEL_YM})</div><div class="sv rd">${fmt(mSale)}<span style="font-size:11px;color:var(--mu)">원</span></div><div style="font-size:10px;color:var(--mu);margin-top:3px">당일 ${fmt(todaySale)}원</div></div>
+    <div class="sc"><div class="sl">월 누계 입금 (${SEL_YM})</div><div class="sv bl">${fmt(mDep)}<span style="font-size:11px;color:var(--mu)">원</span></div><div style="font-size:10px;color:var(--mu);margin-top:3px">당일 ${fmt(todayDep)}원</div></div>
+    <div class="sc"><div class="sl">총 예금잔액 (${SEL_DATE})</div><div class="sv gn">${fmt(accList.reduce((s,a)=>s+getTodayBalance(a.id,SEL_DATE),0))}<span style="font-size:11px;color:var(--mu)">원</span></div><div style="font-size:10px;color:var(--mu);margin-top:3px">${accList.length}개 계좌</div></div>
+  </div>
   <div class="flex gap8 aic fw" style="margin-bottom:12px">
     <button class="btn bp no-print" onclick="showDepModal()">+ 예금 입력</button>
-    
   </div>
   <div class="card"><div class="tw"><table style="table-layout:fixed;width:100%">
     <thead><tr>
@@ -1399,22 +1097,13 @@ function saveAsImage(){
   const pageTitle=document.getElementById('ptitle')?.textContent||'일일시재보고';
   const fileName='일일시재보고_'+pageTitle+'_'+SEL_DATE+'.png';
 
-  // 캡처 대상
-  const target=document.getElementById('pcont');
-  if(!target){alert('캡처할 콘텐츠가 없습니다');return;}
-
   // 인쇄헤더/푸터 임시 표시
   const printHeaders=document.querySelectorAll('.print-header,.print-footer');
   printHeaders.forEach(el=>el.style.display='block');
 
-  // 워크스페이스 사이드바가 있다면 캡처 동안만 숨김 (정확한 너비/높이 측정용)
-  const wsLauncher=document.getElementById('ws-launcher');
-  const originalBodyPaddingLeft=document.body.style.paddingLeft;
-  const originalLauncherDisplay=wsLauncher?wsLauncher.style.display:'';
-  if(wsLauncher){
-    wsLauncher.style.display='none';
-    document.body.style.paddingLeft='0';
-  }
+  // 캡처 대상: pcont (콘텐츠 영역 전체)
+  const target=document.getElementById('pcont');
+  if(!target){alert('캡처할 콘텐츠가 없습니다');return;}
 
   // 로딩 표시
   const loadingDiv=document.createElement('div');
@@ -1422,87 +1111,66 @@ function saveAsImage(){
   loadingDiv.innerHTML='<div style="position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:9999;display:flex;align-items:center;justify-content:center"><div style="background:#fff;border-radius:12px;padding:28px 40px;text-align:center;font-size:14px;font-weight:700;color:#1e293b">🖼 이미지 생성 중...<br><span style="font-size:11px;color:#64748b;font-weight:400;margin-top:6px;display:block">잠시 기다려주세요</span></div></div>';
   document.body.appendChild(loadingDiv);
 
-  // 정리 함수 (성공/실패 공통)
-  const cleanup=()=>{
-    printHeaders.forEach(el=>el.style.display='');
-    if(wsLauncher){
-      wsLauncher.style.display=originalLauncherDisplay;
-      document.body.style.paddingLeft=originalBodyPaddingLeft;
-    }
-    if(loadingDiv.parentNode) document.body.removeChild(loadingDiv);
-  };
+  // A4 가로 기준 (96dpi: 297mm = 1122px), 2배 해상도
+  const A4_WIDTH_PX=1122;
+  const SCALE=2;
+  const contentW=target.offsetWidth;
+  const contentH=target.scrollHeight;
 
-  // 약간의 지연으로 레이아웃 reflow 완료 보장
   setTimeout(()=>{
-    // 정확한 콘텐츠 전체 크기 측정
-    // scrollWidth/Height + 자식 요소들의 실제 boundingRect 비교 → 최대값 사용
-    const rect=target.getBoundingClientRect();
-    let maxRight=rect.left+target.scrollWidth;
-    let maxBottom=rect.top+target.scrollHeight;
-
-    // 자식 요소 순회하며 실제 영역 측정 (overflow된 요소 포함)
-    target.querySelectorAll('*').forEach(el=>{
-      try{
-        const r=el.getBoundingClientRect();
-        if(r.right>maxRight) maxRight=r.right;
-        if(r.bottom>maxBottom) maxBottom=r.bottom;
-      }catch(e){}
-    });
-
-    const contentW=Math.max(target.scrollWidth, target.offsetWidth, Math.ceil(maxRight-rect.left));
-    const contentH=Math.max(target.scrollHeight, target.offsetHeight, Math.ceil(maxBottom-rect.top));
-
-    // 약간의 여백 추가 (우측/하단 안전 여유 20px)
-    const captureW=contentW+20;
-    const captureH=contentH+20;
-
     html2canvas(target,{
-      scale:2,                    // 2배 해상도 (선명함)
+      scale:SCALE,
       useCORS:true,
       allowTaint:true,
       backgroundColor:'#ffffff',
       scrollX:0,
-      scrollY:-window.scrollY,    // 현재 스크롤 위치 보정
-      width:captureW,
-      height:captureH,
-      windowWidth:Math.max(window.innerWidth, captureW),
-      windowHeight:Math.max(window.innerHeight, captureH),
-      logging:false,
-      onclone:(clonedDoc)=>{
-        // 복제된 문서에서 사이드바 제거 + body padding 초기화
-        const cl=clonedDoc.getElementById('ws-launcher');
-        if(cl) cl.remove();
-        clonedDoc.body.style.paddingLeft='0';
-        // 캡처 대상의 overflow 풀어서 잘림 방지
-        const ct=clonedDoc.getElementById('pcont');
-        if(ct){
-          ct.style.overflow='visible';
-          ct.style.maxHeight='none';
-          ct.style.maxWidth='none';
-        }
-        // .no-print 요소들 모두 숨김 (수정/삭제/입력 버튼 + 관리 컬럼)
-        clonedDoc.querySelectorAll('.no-print').forEach(el=>{
-          el.style.display='none';
-          el.style.visibility='hidden';
-          el.style.width='0';
-          el.style.padding='0';
-          el.style.margin='0';
-          el.style.border='0';
-        });
-      }
-    }).then(canvas=>{
-      // PNG 다운로드 (원본 크기 그대로, A4 강제 맞춤 없음)
+      scrollY:0,
+      width:contentW,
+      height:contentH,
+      windowWidth:contentW,
+      windowHeight:contentH,
+      logging:false
+    }).then(srcCanvas=>{
+      // A4 가로 기준 최종 캔버스 생성 (가운데 정렬)
+      const finalW=A4_WIDTH_PX*SCALE;
+      const scaledContentW=srcCanvas.width;
+      const scaledContentH=srcCanvas.height;
+
+      // 콘텐츠 비율로 최종 높이 계산
+      const finalH=Math.round(scaledContentH*(finalW/scaledContentW));
+
+      const finalCanvas=document.createElement('canvas');
+      finalCanvas.width=finalW;
+      finalCanvas.height=finalH;
+
+      const ctx=finalCanvas.getContext('2d');
+      // 흰색 배경
+      ctx.fillStyle='#ffffff';
+      ctx.fillRect(0,0,finalW,finalH);
+
+      // 가운데 정렬: x 오프셋 계산
+      const drawW=Math.min(scaledContentW,finalW);
+      const xOffset=Math.round((finalW-drawW)/2);
+
+      // 콘텐츠를 가운데 배치
+      ctx.drawImage(srcCanvas,0,0,scaledContentW,scaledContentH,xOffset,0,drawW,finalH);
+
+      // PNG 다운로드
       const link=document.createElement('a');
       link.download=fileName;
-      link.href=canvas.toDataURL('image/png',1.0);
+      link.href=finalCanvas.toDataURL('image/png',1.0);
       link.click();
-      cleanup();
+
+      // 인쇄헤더 다시 숨김
+      printHeaders.forEach(el=>el.style.display='');
+      document.body.removeChild(loadingDiv);
     }).catch(err=>{
       console.error(err);
-      cleanup();
+      printHeaders.forEach(el=>el.style.display='');
+      document.body.removeChild(loadingDiv);
       alert('이미지 저장 중 오류가 발생했습니다: '+err.message);
     });
-  },150);
+  },100);
 }
 
 // ═══ EXCEL ═══
@@ -1576,213 +1244,5 @@ ldDB();
 document.getElementById('today-display').textContent='📅 '+today();
 go('dash');
 </script>
-
-
-<script>window.WS_CURRENT_APP="daily-report";</script>
-<!-- ===== Workspace Sidebar (PC only, hidden on mobile) ===== -->
-<style id="ws-launcher-style">
-@media (min-width: 1024px) {
-  body { padding-left: 220px !important; }
-  #ws-launcher {
-    position: fixed !important;
-    left: 0 !important; top: 0 !important; bottom: 0 !important;
-    width: 220px !important;
-    background: linear-gradient(180deg, #0a0d12 0%, #0f1320 100%) !important;
-    border-right: 1px solid rgba(255,255,255,0.08) !important;
-    z-index: 99999 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    padding: 22px 14px !important;
-    font-family: -apple-system, 'Segoe UI', 'Pretendard', sans-serif !important;
-    color: #f0f3f9 !important;
-    overflow-y: auto !important;
-    box-sizing: border-box !important;
-  }
-  #ws-launcher,
-  #ws-launcher *,
-  #ws-launcher *::before,
-  #ws-launcher *::after { box-sizing: border-box !important; }
-
-  #ws-launcher .ws-brand {
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-    padding: 0 8px 18px !important;
-    margin-bottom: 14px !important;
-    border-bottom: 1px solid rgba(255,255,255,0.06) !important;
-    background: transparent !important;
-  }
-  #ws-launcher .ws-logo {
-    width: 32px !important; height: 32px !important;
-    border-radius: 9px !important;
-    background: linear-gradient(135deg, #7c8cff 0%, #b67cff 50%, #ff7cae 100%) !important;
-    display: grid !important; place-items: center !important;
-    box-shadow: 0 6px 20px rgba(124,140,255,0.25) !important;
-    flex-shrink: 0 !important;
-  }
-  #ws-launcher .ws-logo svg { width: 16px !important; height: 16px !important; color: #fff !important; }
-  #ws-launcher .ws-title {
-    font-size: 14px !important; font-weight: 700 !important;
-    letter-spacing: -0.2px !important;
-    color: #f0f3f9 !important;
-    line-height: 1.2 !important;
-    background: transparent !important;
-  }
-  #ws-launcher .ws-sub {
-    font-size: 9px !important; color: #555c6e !important;
-    text-transform: uppercase !important;
-    letter-spacing: 1.5px !important;
-    margin-top: 2px !important;
-    font-weight: 600 !important;
-    background: transparent !important;
-  }
-  #ws-launcher .ws-label {
-    font-size: 9px !important; color: #555c6e !important;
-    text-transform: uppercase !important;
-    letter-spacing: 2px !important;
-    font-weight: 600 !important;
-    padding: 0 12px !important;
-    margin-bottom: 8px !important;
-    background: transparent !important;
-  }
-  #ws-launcher .ws-nav {
-    display: flex !important; flex-direction: column !important;
-    gap: 3px !important;
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
-    overflow: visible !important;
-  }
-  #ws-launcher a.ws-item,
-  #ws-launcher a.ws-item:link,
-  #ws-launcher a.ws-item:visited {
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-    padding: 9px 11px !important;
-    border-radius: 8px !important;
-    color: #8a93a6 !important;
-    text-decoration: none !important;
-    font-size: 12px !important;
-    font-weight: 500 !important;
-    border: 1px solid transparent !important;
-    transition: all 0.15s ease !important;
-    position: relative !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    width: auto !important;
-  }
-  #ws-launcher a.ws-item:hover {
-    background: rgba(255,255,255,0.04) !important;
-    color: #f0f3f9 !important;
-  }
-  #ws-launcher a.ws-item.ws-active,
-  #ws-launcher a.ws-item.ws-active:link,
-  #ws-launcher a.ws-item.ws-active:visited,
-  #ws-launcher a.ws-item.ws-active:hover {
-    background: rgba(124,140,255,0.15) !important;
-    color: #ffffff !important;
-    border-color: rgba(124,140,255,0.3) !important;
-  }
-  #ws-launcher a.ws-item.ws-active::before {
-    content: '' !important;
-    position: absolute !important;
-    left: 0 !important; top: 8px !important; bottom: 8px !important;
-    width: 2px !important;
-    background: linear-gradient(180deg, #7c8cff, #ff7cae) !important;
-    border-radius: 2px !important;
-    display: block !important;
-  }
-  /* 모든 자식 텍스트도 명시적으로 색상 적용 (앱 CSS의 span 오버라이드 방지) */
-  #ws-launcher a.ws-item > span {
-    color: inherit !important;
-    background: transparent !important;
-    font-size: 12px !important;
-    font-weight: 500 !important;
-    line-height: 1.4 !important;
-  }
-  #ws-launcher a.ws-item.ws-active > span:not(.ws-icon) {
-    color: #ffffff !important;
-    font-weight: 600 !important;
-  }
-  #ws-launcher .ws-icon {
-    width: 26px !important; height: 26px !important;
-    border-radius: 7px !important;
-    display: grid !important; place-items: center !important;
-    font-size: 14px !important;
-    background: rgba(255,255,255,0.05) !important;
-    flex-shrink: 0 !important;
-    color: inherit !important;
-  }
-  #ws-launcher a.ws-active .ws-icon {
-    background: rgba(124,140,255,0.2) !important;
-  }
-  #ws-launcher .ws-foot {
-    margin-top: auto !important;
-    padding-top: 14px !important;
-    border-top: 1px solid rgba(255,255,255,0.06) !important;
-    font-size: 10px !important;
-    color: #555c6e !important;
-    text-align: center !important;
-    background: transparent !important;
-  }
-  #ws-launcher .ws-foot .ws-dot {
-    display: inline-block !important;
-    width: 6px !important; height: 6px !important;
-    border-radius: 50% !important;
-    background: #00d97e !important;
-    margin-right: 5px !important;
-    box-shadow: 0 0 6px #00d97e !important;
-  }
-}
-@media (max-width: 1023px) {
-  #ws-launcher { display: none !important; }
-}
-@media print {
-  #ws-launcher { display: none !important; }
-  body { padding-left: 0 !important; }
-}
-</style>
-
-<aside id="ws-launcher">
-  <div class="ws-brand">
-    <div class="ws-logo">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-    </div>
-    <div>
-      <div class="ws-title">Workspace</div>
-      <div class="ws-sub">Console</div>
-    </div>
-  </div>
-  <div class="ws-label">Applications</div>
-  <nav class="ws-nav">
-    <a class="ws-item" data-app="daily-report" href="https://charllottesooh.github.io/Daily-account-report/">
-      <span class="ws-icon">📊</span><span>일일보고</span>
-    </a>
-    <a class="ws-item" data-app="purchase" href="https://charllottesooh.github.io/my-erp/">
-      <span class="ws-icon">💳</span><span>일일결제</span>
-    </a>
-    <a class="ws-item" data-app="franchise" href="https://charllottesooh.github.io/franchise-manager/">
-      <span class="ws-icon">🏪</span><span>가맹점 변동</span>
-    </a>
-    <a class="ws-item" data-app="production" href="https://charllottesooh.github.io/production_erp/">
-      <span class="ws-icon">🏭</span><span>제품생산 ERP</span>
-    </a>
-  </nav>
-  <div class="ws-foot"><span class="ws-dot"></span>Workspace v2</div>
-</aside>
-
-<script>
-(function(){
-  var current = window.WS_CURRENT_APP || '';
-  if (!current) return;
-  var items = document.querySelectorAll('#ws-launcher a.ws-item');
-  items.forEach(function(el){
-    if (el.dataset.app === current) el.classList.add('ws-active');
-  });
-})();
-</script>
-<!-- ===== /Workspace Sidebar ===== -->
-
-
-</body></html>
+</body>
+</html>
