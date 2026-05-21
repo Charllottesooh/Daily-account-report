@@ -1154,8 +1154,8 @@ function saveAsImage(){
       ignoreElements:(el)=>el.classList.contains('no-print')
     }).then(srcCanvas=>{
       // 여백 포함 최종 캔버스
-      const finalW=srcCanvas.width + PADDING*SCALE*2;
-      const finalH=srcCanvas.height + PADDING*SCALE*2;
+     const finalW=srcCanvas.width + PADDING*SCALE*2;
+      const finalH=srcCanvas.height + PADDING*SCALE*3;  // 하단 여백 1.5배 추가
 
       const finalCanvas=document.createElement('canvas');
       finalCanvas.width=finalW;
