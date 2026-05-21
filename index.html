@@ -1133,19 +1133,25 @@ function saveAsImage(){
   const SCALE=2;      // 해상도 배율
 
   setTimeout(()=>{
+    // 캡처 전 실제 전체 크기 측정
+    const fullW=Math.max(target.scrollWidth, target.offsetWidth);
+    const fullH=Math.max(target.scrollHeight, target.offsetHeight);
+
     html2canvas(target,{
       scale:SCALE,
       useCORS:true,
       allowTaint:true,
       backgroundColor:'#f8fafc',
-      scrollX:0,
-      scrollY:0,
-      width:target.scrollWidth,
-      height:target.scrollHeight,
-      windowWidth:target.scrollWidth,
-      windowHeight:target.scrollHeight,
+      scrollX:-window.scrollX,
+      scrollY:-window.scrollY,
+      x:0,
+      y:0,
+      width:fullW,
+      height:fullH,
+      windowWidth:document.documentElement.scrollWidth,
+      windowHeight:fullH,
       logging:false,
-      ignoreElements:(el)=>el.classList.contains('no-print')  // 관리버튼 제외
+      ignoreElements:(el)=>el.classList.contains('no-print')
     }).then(srcCanvas=>{
       // 여백 포함 최종 캔버스
       const finalW=srcCanvas.width + PADDING*SCALE*2;
